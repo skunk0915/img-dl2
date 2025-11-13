@@ -1,0 +1,294 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-dark: #2c2c2c;
+    --surface: #323232;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --shadow-light: rgba(255, 255, 255, 0.05);
+    --shadow-dark: rgba(0, 0, 0, 0.5);
+    --accent: #6c63ff;
+    --error: #ff6b6b;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: var(--text-primary);
+    text-shadow:
+        2px 2px 4px var(--shadow-dark),
+        -2px -2px 4px var(--shadow-light);
+}
+
+/* ギャラリーグリッド */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 20px;
+}
+
+.gallery-item {
+    aspect-ratio: 1;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--surface);
+    box-shadow:
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+.gallery-item:hover {
+    box-shadow:
+        12px 12px 24px var(--shadow-dark),
+        -12px -12px 24px var(--shadow-light);
+    transform: translateY(-5px);
+}
+
+.gallery-item:active {
+    box-shadow:
+        inset 4px 4px 8px var(--shadow-dark),
+        inset -4px -4px 8px var(--shadow-light);
+    transform: translateY(0);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* モーダル共通スタイル */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 画像モーダル */
+.modal-content {
+    position: relative;
+    background: var(--surface);
+    border-radius: 30px;
+    padding: 40px;
+    max-width: 90%;
+    max-height: 90%;
+    box-shadow:
+        20px 20px 40px var(--shadow-dark),
+        -20px -20px 40px var(--shadow-light);
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close,
+.close-password {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 1001;
+}
+
+.close:hover,
+.close-password:hover {
+    color: var(--text-primary);
+}
+
+#modalImage {
+    max-width: 100%;
+    max-height: 70vh;
+    display: block;
+    margin: 0 auto 20px;
+    border-radius: 15px;
+}
+
+/* ダウンロードボタン */
+.download-btn {
+    display: block;
+    margin: 20px auto 0;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    background: var(--surface);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow:
+        6px 6px 12px var(--shadow-dark),
+        -6px -6px 12px var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+    box-shadow:
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+    transform: translateY(-2px);
+}
+
+.download-btn:active {
+    box-shadow:
+        inset 4px 4px 8px var(--shadow-dark),
+        inset -4px -4px 8px var(--shadow-light);
+    transform: translateY(0);
+}
+
+/* パスワードモーダル */
+.password-modal-content {
+    max-width: 500px;
+    text-align: center;
+}
+
+.password-modal-content h2 {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+    font-size: 1.8rem;
+}
+
+.notice {
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#passwordInput {
+    padding: 15px 20px;
+    font-size: 1rem;
+    background: var(--surface);
+    border: none;
+    border-radius: 50px;
+    color: var(--text-primary);
+    box-shadow:
+        inset 4px 4px 8px var(--shadow-dark),
+        inset -4px -4px 8px var(--shadow-light);
+    outline: none;
+    transition: box-shadow 0.3s ease;
+}
+
+#passwordInput:focus {
+    box-shadow:
+        inset 6px 6px 12px var(--shadow-dark),
+        inset -6px -6px 12px var(--shadow-light);
+}
+
+#passwordInput::placeholder {
+    color: var(--text-secondary);
+}
+
+.submit-btn {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    background: var(--accent);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow:
+        6px 6px 12px var(--shadow-dark),
+        -6px -6px 12px var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: #5750d9;
+    box-shadow:
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+    transform: translateY(-2px);
+}
+
+.submit-btn:active {
+    box-shadow:
+        inset 4px 4px 8px rgba(0, 0, 0, 0.3),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.1);
+    transform: translateY(0);
+}
+
+.error-message {
+    color: var(--error);
+    margin-top: 15px;
+    font-size: 0.9rem;
+    min-height: 20px;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .password-modal-content {
+        max-width: 90%;
+    }
+}

@@ -6,7 +6,7 @@ $sort = $_GET['sort'] ?? 'date_desc';
 $allTags = getAllTags();
 // Default to empty (show all) if not set.
 $filterTags = $_GET['filter_tags'] ?? [];
-$images = getImages($sort, $filterTags);
+$images = getImages($sort, []);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -15,6 +15,7 @@ $images = getImages($sort, $filterTags);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>画像ギャラリー</title>
     <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="css/neumorphism.css?v=<?= time() ?>">
 </head>
 <body>
     <div class="container">
@@ -45,10 +46,18 @@ $images = getImages($sort, $filterTags);
 
                     <div class="form-group">
                         <label>タグフィルター</label>
+                        <div class="match-mode-switch">
+                            <label class="match-mode-option active" id="option-any">
+                                <input type="radio" name="match_mode" value="any" checked>OR
+                            </label>
+                            <label class="match-mode-option" id="option-all">
+                                <input type="radio" name="match_mode" value="all">AND
+                            </label>
+                        </div>
                         <div class="tag-checkboxes">
                             <?php foreach ($allTags as $tag): ?>
                                 <label class="tag-label">
-                                    <input type="checkbox" name="filter_tags[]" value="<?= htmlspecialchars($tag) ?>" <?= in_array($tag, $filterTags) ? 'checked' : '' ?> onchange="this.form.submit()">
+                                    <input type="checkbox" name="filter_tags[]" value="<?= htmlspecialchars($tag) ?>" <?= in_array($tag, $filterTags) ? 'checked' : '' ?>>
                                     <?= htmlspecialchars($tag) ?>
                                 </label>
                             <?php endforeach; ?>
@@ -60,7 +69,7 @@ $images = getImages($sort, $filterTags);
 
         <div class="gallery">
             <?php foreach ($images as $img): ?>
-                <div class="gallery-item" data-thumb="<?= htmlspecialchars($img['thumb']) ?>" data-original="<?= htmlspecialchars($img['path']) ?>" data-filename="<?= htmlspecialchars($img['filename']) ?>">
+                <div class="gallery-item" data-thumb="<?= htmlspecialchars($img['thumb']) ?>" data-original="<?= htmlspecialchars($img['path']) ?>" data-filename="<?= htmlspecialchars($img['filename']) ?>" data-tags='<?= json_encode($img['tags'], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
                     <img src="<?= htmlspecialchars($img['thumb']) ?>" alt="<?= htmlspecialchars($img['filename']) ?>">
                     <div class="tag-overlay">
                         <?php foreach ($img['tags'] as $tag): ?>

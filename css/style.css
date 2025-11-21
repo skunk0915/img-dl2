@@ -26,7 +26,7 @@ body {
 
 .logo {
     display: block;
-    margin: 0 auto;
+    margin: 0 auto 1em;
     width: auto;
     max-width: 300px;
 }
@@ -71,7 +71,7 @@ body {
     box-shadow:
         12px 12px 24px var(--shadow-dark),
         -12px -12px 24px var(--shadow-light);
-    transform: translateY(-5px);
+    /* transform: translateY(-5px); */
 }
 
 .gallery-item:active {
@@ -191,7 +191,7 @@ body {
     box-shadow:
         8px 8px 16px var(--shadow-dark),
         -8px -8px 16px var(--shadow-light);
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
 }
 
 .download-btn:active {
@@ -270,7 +270,7 @@ body {
     box-shadow:
         8px 8px 16px var(--shadow-dark),
         -8px -8px 16px var(--shadow-light);
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
 }
 
 .submit-btn:active {
@@ -368,7 +368,7 @@ body {
 
 .form-group label {
     display: block;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     color: var(--text-secondary);
     font-weight: bold;
 }
@@ -406,7 +406,7 @@ body {
 }
 
 .tag-label:hover {
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
 }
 
 .tag-label input {
@@ -501,4 +501,46 @@ body {
 
 .admin-modal-form .submit-btn {
     margin: 1em 0 0;
-}
+
+    /* Neumorphism Switch */
+    .match-mode-switch {
+        display: flex;
+        background: var(--bg-dark);
+        padding: 5px;
+        border-radius: 50px;
+        box-shadow:
+            inset 4px 4px 8px var(--shadow-dark),
+            inset -4px -4px 8px var(--shadow-light);
+        width: fit-content;
+        margin-bottom: 20px !important;
+    }
+
+    .match-mode-option {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 50px;
+        color: var(--text-secondary);
+        font-weight: bold;
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+
+    .match-mode-option input {
+        display: none;
+    }
+
+    .match-mode-option:hover {
+        color: var(--text-primary);
+    }
+
+    .match-mode-option.active {
+        color: var(--text-primary);
+        background: var(--surface);
+        box-shadow:
+            4px 4px 8px var(--shadow-dark),
+            -4px -4px 8px var(--shadow-light);
+    }

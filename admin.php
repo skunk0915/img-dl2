@@ -128,7 +128,7 @@ $sort = $_GET['sort'] ?? 'date_desc';
 $allTags = getAllTags();
 // Default to empty (show all) if not set.
 $filterTags = $_GET['filter_tags'] ?? [];
-$images = getImages($sort, $filterTags);
+$images = getImages($sort, []);
 
 ?>
 <!DOCTYPE html>
@@ -156,7 +156,7 @@ $images = getImages($sort, $filterTags);
 <body>
     <div class="container">
         <div class="admin-header">
-            <h1 class="title" style="margin-bottom: 0;">画像管理</h1>
+            <h1 class="title" style="margin-bottom: 0;">管理画面</h1>
             <a href="?logout=1" class="submit-btn" style="text-decoration: none; padding: 10px 20px; font-size: 0.9rem;">ログアウト</a>
         </div>
 
@@ -205,10 +205,18 @@ $images = getImages($sort, $filterTags);
                     </div>
                     <div class="form-group">
                         <label>タグフィルター</label>
+                        <div class="match-mode-switch">
+                            <label class="match-mode-option active" id="option-any-admin">
+                                <input type="radio" name="match_mode" value="any" checked>OR
+                            </label>
+                            <label class="match-mode-option" id="option-all-admin">
+                                <input type="radio" name="match_mode" value="all">AND
+                            </label>
+                        </div>
                         <div class="tag-checkboxes">
                             <?php foreach ($allTags as $tag): ?>
                                 <label class="tag-label">
-                                    <input type="checkbox" name="filter_tags[]" value="<?= htmlspecialchars($tag) ?>" <?= in_array($tag, $filterTags) ? 'checked' : '' ?> onchange="this.form.submit()">
+                                    <input type="checkbox" name="filter_tags[]" value="<?= htmlspecialchars($tag) ?>" <?= in_array($tag, $filterTags) ? 'checked' : '' ?>>
                                     <?= htmlspecialchars($tag) ?>
                                 </label>
                             <?php endforeach; ?>
@@ -220,7 +228,7 @@ $images = getImages($sort, $filterTags);
 
         <div class="gallery">
             <?php foreach ($images as $img): ?>
-                <div class="gallery-item admin-gallery-item" onclick="openEditModal('<?= htmlspecialchars($img['path']) ?>', '<?= htmlspecialchars($img['filename']) ?>', '<?= htmlspecialchars(implode(', ', $img['tags'])) ?>')">
+                <div class="gallery-item admin-gallery-item" data-tags='<?= json_encode($img['tags'], JSON_HEX_APOS | JSON_HEX_QUOT) ?>' onclick="openEditModal('<?= htmlspecialchars($img['path']) ?>', '<?= htmlspecialchars($img['filename']) ?>', '<?= htmlspecialchars(implode(', ', $img['tags'])) ?>')">
                     <img src="<?= htmlspecialchars($img['thumb']) ?>" alt="<?= htmlspecialchars($img['filename']) ?>">
                     
                     <div class="tag-overlay">

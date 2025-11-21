@@ -31,30 +31,40 @@ if (sizeSlider) {
 let currentOriginalPath = '';
 let currentFileName = '';
 
-// ギャラリーアイテムクリックイベント
-galleryItems.forEach(item => {
-    item.addEventListener('click', function () {
-        const thumbPath = this.getAttribute('data-thumb');
-        currentOriginalPath = this.getAttribute('data-original');
-        currentFileName = this.getAttribute('data-filename');
+// ギャラリーアイテムクリックイベント (index.phpのみ)
+if (imageModal && modalImage) {
+    galleryItems.forEach(item => {
+        // admin.phpではonclick属性が使われているため、ここではイベントリスナーを追加しない
+        // もしくは、admin-gallery-itemクラスがある場合は除外する
+        if (item.classList.contains('admin-gallery-item')) return;
 
-        modalImage.src = thumbPath;
-        imageModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        item.addEventListener('click', function () {
+            const thumbPath = this.getAttribute('data-thumb');
+            currentOriginalPath = this.getAttribute('data-original');
+            currentFileName = this.getAttribute('data-filename');
+
+            modalImage.src = thumbPath;
+            imageModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
     });
-});
+}
 
 // ダウンロードボタンクリックイベント
 if (downloadBtn) {
     downloadBtn.addEventListener('click', function () {
         // 画像モーダルを閉じる
-        imageModal.classList.remove('active');
+        if (imageModal) imageModal.classList.remove('active');
 
         // パスワードモーダルを開く
-        passwordModal.classList.add('active');
-        passwordInput.value = '';
-        errorMessage.textContent = '';
-        passwordInput.focus();
+        if (passwordModal) {
+            passwordModal.classList.add('active');
+            if (passwordInput) {
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+            if (errorMessage) errorMessage.textContent = '';
+        }
     });
 }
 
@@ -76,17 +86,20 @@ if (passwordInput) {
 
 // パスワード送信処理
 function submitPassword() {
+    if (!passwordInput) return;
     const password = passwordInput.value.trim();
 
     if (password === '') {
-        errorMessage.textContent = 'パスワードを入力してください';
+        if (errorMessage) errorMessage.textContent = 'パスワードを入力してください';
         return;
     }
 
     // ローディング表示
-    passwordSubmit.disabled = true;
-    passwordSubmit.textContent = '確認中...';
-    errorMessage.textContent = '';
+    if (passwordSubmit) {
+        passwordSubmit.disabled = true;
+        passwordSubmit.textContent = '確認中...';
+    }
+    if (errorMessage) errorMessage.textContent = '';
 
     // PHPにパスワードと画像パスを送信
     fetch('download.php', {
@@ -103,26 +116,28 @@ function submitPassword() {
                 downloadImage(data.download_url);
 
                 // モーダルを閉じる
-                passwordModal.classList.remove('active');
+                if (passwordModal) passwordModal.classList.remove('active');
                 document.body.style.overflow = 'auto';
 
                 // リセット
                 passwordInput.value = '';
-                errorMessage.textContent = '';
+                if (errorMessage) errorMessage.textContent = '';
             } else {
                 // パスワードが間違っている場合
-                errorMessage.textContent = data.message || 'パスワードが正しくありません';
+                if (errorMessage) errorMessage.textContent = data.message || 'パスワードが正しくありません';
                 passwordInput.value = '';
                 passwordInput.focus();
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            errorMessage.textContent = 'エラーが発生しました。もう一度お試しください。';
+            if (errorMessage) errorMessage.textContent = 'エラーが発生しました。もう一度お試しください。';
         })
         .finally(() => {
-            passwordSubmit.disabled = false;
-            passwordSubmit.textContent = 'ダウンロード';
+            if (passwordSubmit) {
+                passwordSubmit.disabled = false;
+                passwordSubmit.textContent = 'ダウンロード';
+            }
         });
 }
 
@@ -137,7 +152,7 @@ function downloadImage(url) {
 }
 
 // 画像モーダルを閉じる
-if (closeBtn) {
+if (closeBtn && imageModal) {
     closeBtn.addEventListener('click', function () {
         imageModal.classList.remove('active');
         document.body.style.overflow = 'auto';
@@ -145,12 +160,12 @@ if (closeBtn) {
 }
 
 // パスワードモーダルを閉じる
-if (closePasswordBtn) {
+if (closePasswordBtn && passwordModal) {
     closePasswordBtn.addEventListener('click', function () {
         passwordModal.classList.remove('active');
         document.body.style.overflow = 'auto';
-        passwordInput.value = '';
-        errorMessage.textContent = '';
+        if (passwordInput) passwordInput.value = '';
+        if (errorMessage) errorMessage.textContent = '';
     });
 }
 
@@ -169,8 +184,8 @@ if (passwordModal) {
         if (e.target === passwordModal) {
             passwordModal.classList.remove('active');
             document.body.style.overflow = 'auto';
-            passwordInput.value = '';
-            errorMessage.textContent = '';
+            if (passwordInput) passwordInput.value = '';
+            if (errorMessage) errorMessage.textContent = '';
         }
     });
 }
@@ -178,15 +193,19 @@ if (passwordModal) {
 // ESCキーでモーダルを閉じる
 document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
-        if (imageModal.classList.contains('active')) {
+        if (imageModal && imageModal.classList.contains('active')) {
             imageModal.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
-        if (passwordModal.classList.contains('active')) {
+        if (passwordModal && passwordModal.classList.contains('active')) {
             passwordModal.classList.remove('active');
             document.body.style.overflow = 'auto';
-            passwordInput.value = '';
-            errorMessage.textContent = '';
+            if (passwordInput) passwordInput.value = '';
+            if (errorMessage) errorMessage.textContent = '';
+        }
+        const editModal = document.getElementById('editModal');
+        if (editModal && editModal.style.display === 'block') {
+            closeEditModal();
         }
     }
 });
@@ -208,3 +227,111 @@ adminPanelHeaders.forEach(header => {
         }
     });
 });
+
+// Tag Filtering
+const filterCheckboxes = document.querySelectorAll('input[name="filter_tags[]"]');
+
+function filterImages() {
+    const checkedTags = Array.from(filterCheckboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+    const matchMode = document.querySelector('input[name="match_mode"]:checked').value;
+    const galleryItems = document.querySelectorAll('.gallery-item');
+
+    galleryItems.forEach(item => {
+        if (checkedTags.length === 0) {
+            item.style.display = '';
+            return;
+        }
+
+        // data-tags属性がない場合（admin.phpなど）はフィルタリングしない、または空として扱う
+        // admin.phpでもフィルタリングしたい場合はdata-tagsを追加する必要がある
+        const tagsAttr = item.getAttribute('data-tags');
+        if (!tagsAttr) return;
+
+        const itemTags = JSON.parse(tagsAttr || '[]');
+
+        let isMatch = false;
+        if (matchMode === 'all') {
+            // AND: すべての選択されたタグを含んでいるか
+            isMatch = checkedTags.every(tag => itemTags.includes(tag));
+        } else {
+            // OR: いずれかの選択されたタグを含んでいるか
+            isMatch = checkedTags.some(tag => itemTags.includes(tag));
+        }
+
+        if (isMatch) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    // Update URL without reloading
+    const url = new URL(window.location);
+    url.searchParams.delete('filter_tags[]');
+    checkedTags.forEach(tag => {
+        url.searchParams.append('filter_tags[]', tag);
+    });
+    url.searchParams.set('match_mode', matchMode);
+    window.history.replaceState({}, '', url);
+}
+
+// Match mode change listener
+const matchModeRadios = document.querySelectorAll('input[name="match_mode"]');
+matchModeRadios.forEach(radio => {
+    radio.addEventListener('change', function () {
+        // Update UI classes
+        document.querySelectorAll('.match-mode-option').forEach(opt => opt.classList.remove('active'));
+        this.closest('.match-mode-option').classList.add('active');
+
+        filterImages();
+    });
+});
+
+filterCheckboxes.forEach(cb => {
+    cb.addEventListener('change', filterImages);
+});
+
+// Initial filter on load (in case of back button or reload)
+const urlParams = new URLSearchParams(window.location.search);
+const savedMatchMode = urlParams.get('match_mode');
+if (savedMatchMode) {
+    const radio = document.querySelector(`input[name="match_mode"][value="${savedMatchMode}"]`);
+    if (radio) {
+        radio.checked = true;
+        // Update UI classes for initial state
+        document.querySelectorAll('.match-mode-option').forEach(opt => opt.classList.remove('active'));
+        radio.closest('.match-mode-option').classList.add('active');
+    }
+}
+filterImages();
+
+// Admin Edit Modal Functions
+function openEditModal(path, filename, tags) {
+    const modal = document.getElementById('editModal');
+    const modalImg = document.getElementById('editModalImage');
+    const filenameInput = document.getElementById('editModalFilename');
+    const tagsInput = document.getElementById('editModalTags');
+
+    if (modal && modalImg && filenameInput && tagsInput) {
+        modalImg.src = path;
+        filenameInput.value = filename;
+        tagsInput.value = tags;
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('editModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Make functions global so they can be called from onclick attributes
+window.openEditModal = openEditModal;
+window.closeEditModal = closeEditModal;

@@ -241,7 +241,7 @@ document.addEventListener('keydown', function (e) {
             if (errorMessage) errorMessage.textContent = '';
         }
         const editModal = document.getElementById('editModal');
-        if (editModal && editModal.style.display === 'block') {
+        if (editModal && editModal.classList.contains('active')) {
             closeEditModal();
         }
     }
@@ -356,7 +356,7 @@ function openEditModal(path, filename, tags) {
         modalImg.src = path;
         filenameInput.value = filename;
         tagsInput.value = tags;
-        modal.style.display = 'block';
+        modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
 }
@@ -364,9 +364,19 @@ function openEditModal(path, filename, tags) {
 function closeEditModal() {
     const modal = document.getElementById('editModal');
     if (modal) {
-        modal.style.display = 'none';
+        modal.classList.remove('active');
         document.body.style.overflow = 'auto';
     }
+}
+
+// モーダル外クリックで閉じる (editModal)
+const editModal = document.getElementById('editModal');
+if (editModal) {
+    editModal.addEventListener('click', function (e) {
+        if (e.target === editModal) {
+            closeEditModal();
+        }
+    });
 }
 
 // Make functions global so they can be called from onclick attributes

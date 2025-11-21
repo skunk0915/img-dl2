@@ -99,6 +99,8 @@ body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
     animation: fadeIn 0.3s ease;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal.active {
@@ -405,9 +407,7 @@ body {
     box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
 }
 
-.tag-label:hover {
-    /* transform: translateY(-2px); */
-}
+
 
 .tag-label input {
     margin-right: 8px;
@@ -544,3 +544,4 @@ body {
             4px 4px 8px var(--shadow-dark),
             -4px -4px 8px var(--shadow-light);
     }
+}

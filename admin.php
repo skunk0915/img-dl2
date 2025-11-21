@@ -26,7 +26,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     <html lang="ja">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
         <title>管理画面ログイン</title>
         <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
 
@@ -134,7 +134,7 @@ $images = getImages($sort, []);
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>画像管理画面</title>
     <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
 
@@ -142,7 +142,7 @@ $images = getImages($sort, []);
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .admin-panel { background: var(--surface); padding: 20px; border-radius: 20px; margin-bottom: 30px; }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
+        .form-group label { display: block;  color: var(--text-secondary); }
         .form-control { width: 100%; padding: 10px; border-radius: 10px; border: none; background: var(--bg-dark); color: var(--text-primary); }
         .tag-checkboxes { display: flex; flex-wrap: wrap; gap: 10px; }
         .tag-label { background: var(--bg-dark); padding: 5px 10px; border-radius: 15px; cursor: pointer; user-select: none; }

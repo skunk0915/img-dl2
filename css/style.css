@@ -155,9 +155,9 @@ body {
     overflow: hidden;
     cursor: pointer;
     background: var(--surface);
-    box-shadow:
+    /* box-shadow:
         calc(8px / var(--gallery-columns) * 4) calc(8px / var(--gallery-columns) * 4) calc(16px / var(--gallery-columns) * 4) var(--shadow-dark),
-        0px calc(-2px / var(--gallery-columns) * 4) calc(1px / var(--gallery-columns) * 4) var(--shadow-light);
+        0px calc(-2px / var(--gallery-columns) * 4) calc(1px / var(--gallery-columns) * 4) var(--shadow-light); */
     transition: all 0.3s ease;
 }
 

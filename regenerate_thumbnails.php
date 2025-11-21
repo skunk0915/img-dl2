@@ -59,8 +59,15 @@ $errors = [];
 
 if (isset($_POST['regenerate'])) {
     $watermarkPosition = $_POST['watermark_position'] ?? 'bottom-right';
-    $watermarkOpacity = intval($_POST['watermark_opacity'] ?? 20);
-    $watermarkSize = intval($_POST['watermark_size'] ?? 100);
+    $watermarkOpacity = intval($_POST['watermark_opacity'] ?? 70);
+    $watermarkSize = intval($_POST['watermark_size'] ?? 30);
+
+    // Save settings
+    saveWatermarkSettings([
+        'position' => $watermarkPosition,
+        'opacity' => $watermarkOpacity,
+        'size' => $watermarkSize
+    ]);
     
     $files = glob(IMG_DIR . '*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
     
@@ -80,6 +87,8 @@ if (isset($_POST['regenerate'])) {
     }
 }
 
+// Load current settings for form defaults
+$currentSettings = loadWatermarkSettings();
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -130,24 +139,24 @@ if (isset($_POST['regenerate'])) {
                     <div class="form-group">
                         <label>透かしの位置</label>
                         <select name="watermark_position" class="form-control">
-                            <option value="center">中央</option>
-                            <option value="top-left">左上</option>
-                            <option value="top-right">右上</option>
-                            <option value="bottom-left">左下</option>
-                            <option value="bottom-right">右下</option>
+                            <option value="center" <?= $currentSettings['position'] === 'center' ? 'selected' : '' ?>>中央</option>
+                            <option value="top-left" <?= $currentSettings['position'] === 'top-left' ? 'selected' : '' ?>>左上</option>
+                            <option value="top-right" <?= $currentSettings['position'] === 'top-right' ? 'selected' : '' ?>>右上</option>
+                            <option value="bottom-left" <?= $currentSettings['position'] === 'bottom-left' ? 'selected' : '' ?>>左下</option>
+                            <option value="bottom-right" <?= $currentSettings['position'] === 'bottom-right' ? 'selected' : '' ?>>右下</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label>透かしのサイズ (10-100%)</label>
-                        <input type="range" name="watermark_size" min="10" max="100" value="100" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
-                        <span style="display: inline-block; margin-left: 10px; color: var(--text-secondary);">100</span>
+                        <input type="range" name="watermark_size" min="10" max="100" value="<?= htmlspecialchars($currentSettings['size']) ?>" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
+                        <span style="display: inline-block; margin-left: 10px; color: var(--text-secondary);"><?= htmlspecialchars($currentSettings['size']) ?></span>
                     </div>
 
                     <div class="form-group">
                         <label>透かしの不透明度 (0-100)</label>
-                        <input type="range" name="watermark_opacity" min="0" max="100" value="20" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
-                        <span style="display: inline-block; margin-left: 10px; color: var(--text-secondary);">20</span>
+                        <input type="range" name="watermark_opacity" min="0" max="100" value="<?= htmlspecialchars($currentSettings['opacity']) ?>" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
+                        <span style="display: inline-block; margin-left: 10px; color: var(--text-secondary);"><?= htmlspecialchars($currentSettings['opacity']) ?></span>
                     </div>
                     
                     <button type="submit" name="regenerate" class="submit-btn" onclick="return confirm('すべてのサムネイルを再生成します。よろしいですか？');">

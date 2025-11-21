@@ -6,6 +6,8 @@ define('IMG_DIR', 'upload/');
 define('THUMB_DIR', 'upload/thumb/');
 define('WATERMARK_FILE', 'img/wm.png');
 
+define('WATERMARK_SETTINGS_FILE', 'watermark_settings.json');
+
 /**
  * Load data from JSON file
  */
@@ -22,6 +24,33 @@ function loadData() {
  */
 function saveData($data) {
     file_put_contents(DATA_FILE, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+}
+
+/**
+ * Load watermark settings
+ */
+function loadWatermarkSettings() {
+    $defaults = [
+        'position' => 'bottom-right',
+        'opacity' => 70,
+        'size' => 30
+    ];
+    
+    if (!file_exists(WATERMARK_SETTINGS_FILE)) {
+        return $defaults;
+    }
+    
+    $json = file_get_contents(WATERMARK_SETTINGS_FILE);
+    $settings = json_decode($json, true);
+    
+    return array_merge($defaults, $settings ?: []);
+}
+
+/**
+ * Save watermark settings
+ */
+function saveWatermarkSettings($settings) {
+    file_put_contents(WATERMARK_SETTINGS_FILE, json_encode($settings, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 }
 
 /**

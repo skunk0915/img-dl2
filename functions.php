@@ -4,6 +4,7 @@
 define('DATA_FILE', 'data.json');
 define('IMG_DIR', 'upload/');
 define('THUMB_DIR', 'upload/thumb/');
+define('WATERMARK_FILE', 'img/wm.png');
 
 /**
  * Load data from JSON file
@@ -26,7 +27,7 @@ function saveData($data) {
 /**
  * Create a thumbnail image
  */
-function createThumbnail($source, $destination, $watermarkText = null, $watermarkPosition = 'bottom-right', $watermarkOpacity = 70) {
+function createThumbnail($source, $destination, $watermarkPosition = 'bottom-right', $watermarkOpacity = 70, $watermarkSize = 30) {
     list($width, $height, $type) = getimagesize($source);
     
     $newWidth = 0;
@@ -67,50 +68,72 @@ function createThumbnail($source, $destination, $watermarkText = null, $watermar
     imagecopyresampled($thumb, $sourceImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
     // Apply Watermark
-    if ($watermarkText) {
-        // Calculate alpha (0-127, where 0 is opaque)
-        $alpha = intval(127 - ($watermarkOpacity / 100 * 127));
-        $textColor = imagecolorallocatealpha($thumb, 255, 255, 255, $alpha);
+    // Apply Watermark
+    if (file_exists(WATERMARK_FILE)) {
+        $watermark = imagecreatefrompng(WATERMARK_FILE);
+        $origWmWidth = imagesx($watermark);
+        $origWmHeight = imagesy($watermark);
+
+        // Calculate target size (e.g., 30% of thumbnail width)
+        $scaleRatio = $watermarkSize / 100;
+        $wmWidth = intval($newWidth * $scaleRatio);
+        $wmHeight = intval($origWmHeight * ($wmWidth / $origWmWidth));
+
+        // Resize watermark
+        $resizedWatermark = imagecreatetruecolor($wmWidth, $wmHeight);
+        imagealphablending($resizedWatermark, false);
+        imagesavealpha($resizedWatermark, true);
+        imagecopyresampled($resizedWatermark, $watermark, 0, 0, 0, 0, $wmWidth, $wmHeight, $origWmWidth, $origWmHeight);
         
-        // Use built-in font 5 (largest)
-        $font = 5;
-        $textWidth = imagefontwidth($font) * strlen($watermarkText);
-        $textHeight = imagefontheight($font);
-        
+        imagedestroy($watermark); // Free original watermark
+        $watermark = $resizedWatermark; // Use resized one
+
+        // Calculate position
         $x = 0;
         $y = 0;
         $padding = 10;
-        
+
         switch ($watermarkPosition) {
             case 'top-left':
                 $x = $padding;
                 $y = $padding;
                 break;
             case 'top-right':
-                $x = $newWidth - $textWidth - $padding;
+                $x = $newWidth - $wmWidth - $padding;
                 $y = $padding;
                 break;
             case 'bottom-left':
                 $x = $padding;
-                $y = $newHeight - $textHeight - $padding;
+                $y = $newHeight - $wmHeight - $padding;
                 break;
             case 'bottom-right':
-                $x = $newWidth - $textWidth - $padding;
-                $y = $newHeight - $textHeight - $padding;
+                $x = $newWidth - $wmWidth - $padding;
+                $y = $newHeight - $wmHeight - $padding;
                 break;
             case 'center':
-                $x = ($newWidth - $textWidth) / 2;
-                $y = ($newHeight - $textHeight) / 2;
+                $x = ($newWidth - $wmWidth) / 2;
+                $y = ($newHeight - $wmHeight) / 2;
                 break;
             default: // bottom-right default
-                $x = $newWidth - $textWidth - $padding;
-                $y = $newHeight - $textHeight - $padding;
+                $x = $newWidth - $wmWidth - $padding;
+                $y = $newHeight - $wmHeight - $padding;
         }
+
+        // Apply opacity
+        // imagecopymerge doesn't work well with alpha channels in PNGs.
+        // For true alpha blending with opacity control, we need a custom approach or use imagecopy if opacity is 100.
+        // However, a simple way to handle opacity with PNG watermark is to use imagecopymerge with a workaround
+        // or iterate pixels (slow).
+        // A better approach for modern PHP GD is to use imagecopy() if we pre-process the watermark opacity.
         
-        // Add a drop shadow for better visibility
-        $shadowColor = imagecolorallocatealpha($thumb, 0, 0, 0, $alpha);
-        imagestring($thumb, $font, intval($x + 1), intval($y + 1), $watermarkText, $shadowColor);
-        imagestring($thumb, $font, intval($x), intval($y), $watermarkText, $textColor);
+        // Let's try a robust method for opacity:
+        // Create a temporary image for the watermark with the desired opacity
+        $cut = imagecreatetruecolor($wmWidth, $wmHeight);
+        imagecopy($cut, $thumb, 0, 0, $x, $y, $wmWidth, $wmHeight);
+        imagecopy($cut, $watermark, 0, 0, 0, 0, $wmWidth, $wmHeight);
+        imagecopymerge($thumb, $cut, $x, $y, 0, 0, $wmWidth, $wmHeight, $watermarkOpacity);
+        imagedestroy($cut);
+        imagedestroy($watermark);
     }
 
     // Save with high compression (low quality)

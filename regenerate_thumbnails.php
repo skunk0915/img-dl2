@@ -58,9 +58,9 @@ $regenerated = [];
 $errors = [];
 
 if (isset($_POST['regenerate'])) {
-    $watermarkText = $_POST['watermark_text'] ?? 'NEOWNDROP';
     $watermarkPosition = $_POST['watermark_position'] ?? 'bottom-right';
-    $watermarkOpacity = intval($_POST['watermark_opacity'] ?? 70);
+    $watermarkOpacity = intval($_POST['watermark_opacity'] ?? 20);
+    $watermarkSize = intval($_POST['watermark_size'] ?? 100);
     
     $files = glob(IMG_DIR . '*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
     
@@ -69,7 +69,7 @@ if (isset($_POST['regenerate'])) {
         $thumbPath = THUMB_DIR . $filename;
         
         try {
-            if (createThumbnail($file, $thumbPath, $watermarkText, $watermarkPosition, $watermarkOpacity)) {
+            if (createThumbnail($file, $thumbPath, $watermarkPosition, $watermarkOpacity, $watermarkSize)) {
                 $regenerated[] = $filename;
             } else {
                 $errors[] = $filename . ' (生成失敗)';
@@ -125,10 +125,7 @@ if (isset($_POST['regenerate'])) {
             </div>
             <div class="admin-panel-content active">
                 <form method="post">
-                    <div class="form-group">
-                        <label>透かしテキスト</label>
-                        <input type="text" name="watermark_text" value="NEOWNDROP" class="form-control" required>
-                    </div>
+
                     
                     <div class="form-group">
                         <label>透かしの位置</label>
@@ -142,9 +139,15 @@ if (isset($_POST['regenerate'])) {
                     </div>
                     
                     <div class="form-group">
+                        <label>透かしのサイズ (10-100%)</label>
+                        <input type="range" name="watermark_size" min="10" max="100" value="100" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
+                        <span style="display: inline-block; margin-left: 10px; color: var(--text-secondary);">100</span>
+                    </div>
+
+                    <div class="form-group">
                         <label>透かしの不透明度 (0-100)</label>
-                        <input type="range" name="watermark_opacity" min="0" max="100" value="70" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
-                        <span style="display: inline-block; margin-left: 10px; color: var(--text-secondary);">70</span>
+                        <input type="range" name="watermark_opacity" min="0" max="100" value="20" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
+                        <span style="display: inline-block; margin-left: 10px; color: var(--text-secondary);">20</span>
                     </div>
                     
                     <button type="submit" name="regenerate" class="submit-btn" onclick="return confirm('すべてのサムネイルを再生成します。よろしいですか？');">

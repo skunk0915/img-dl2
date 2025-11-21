@@ -158,6 +158,7 @@ $images = getImages($sort, []);
             <h1 class="title" style="margin-bottom: 0;">管理画面</h1>
             <div style="display: flex; gap: 10px;">
                 <a href="index.php" class="submit-btn" style="text-decoration: none; padding: 10px 20px; font-size: 0.9rem; background: var(--primary);">メイン画面</a>
+                <a href="regenerate_thumbnails.php" class="submit-btn" style="text-decoration: none; padding: 10px 20px; font-size: 0.9rem;">サムネイル再生成</a>
                 <a href="?logout=1" class="submit-btn" style="text-decoration: none; padding: 10px 20px; font-size: 0.9rem;">ログアウト</a>
             </div>
         </div>

@@ -26,7 +26,7 @@ function saveData($data) {
 /**
  * Create a thumbnail image
  */
-function createThumbnail($source, $destination) {
+function createThumbnail($source, $destination, $watermarkText = null, $watermarkPosition = 'bottom-right', $watermarkOpacity = 70) {
     list($width, $height, $type) = getimagesize($source);
     
     $newWidth = 0;
@@ -65,6 +65,53 @@ function createThumbnail($source, $destination) {
     }
 
     imagecopyresampled($thumb, $sourceImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+    // Apply Watermark
+    if ($watermarkText) {
+        // Calculate alpha (0-127, where 0 is opaque)
+        $alpha = intval(127 - ($watermarkOpacity / 100 * 127));
+        $textColor = imagecolorallocatealpha($thumb, 255, 255, 255, $alpha);
+        
+        // Use built-in font 5 (largest)
+        $font = 5;
+        $textWidth = imagefontwidth($font) * strlen($watermarkText);
+        $textHeight = imagefontheight($font);
+        
+        $x = 0;
+        $y = 0;
+        $padding = 10;
+        
+        switch ($watermarkPosition) {
+            case 'top-left':
+                $x = $padding;
+                $y = $padding;
+                break;
+            case 'top-right':
+                $x = $newWidth - $textWidth - $padding;
+                $y = $padding;
+                break;
+            case 'bottom-left':
+                $x = $padding;
+                $y = $newHeight - $textHeight - $padding;
+                break;
+            case 'bottom-right':
+                $x = $newWidth - $textWidth - $padding;
+                $y = $newHeight - $textHeight - $padding;
+                break;
+            case 'center':
+                $x = ($newWidth - $textWidth) / 2;
+                $y = ($newHeight - $textHeight) / 2;
+                break;
+            default: // bottom-right default
+                $x = $newWidth - $textWidth - $padding;
+                $y = $newHeight - $textHeight - $padding;
+        }
+        
+        // Add a drop shadow for better visibility
+        $shadowColor = imagecolorallocatealpha($thumb, 0, 0, 0, $alpha);
+        imagestring($thumb, $font, intval($x + 1), intval($y + 1), $watermarkText, $shadowColor);
+        imagestring($thumb, $font, intval($x), intval($y), $watermarkText, $textColor);
+    }
 
     // Save with high compression (low quality)
     switch ($type) {

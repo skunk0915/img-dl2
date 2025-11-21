@@ -229,7 +229,7 @@ $images = getImages($sort, []);
         <div class="gallery">
             <?php foreach ($images as $img): ?>
                 <div class="gallery-item admin-gallery-item" data-tags='<?= json_encode($img['tags'], JSON_HEX_APOS | JSON_HEX_QUOT) ?>' onclick="openEditModal('<?= htmlspecialchars($img['path']) ?>', '<?= htmlspecialchars($img['filename']) ?>', '<?= htmlspecialchars(implode(', ', $img['tags'])) ?>')">
-                    <img src="<?= htmlspecialchars($img['thumb']) ?>" alt="<?= htmlspecialchars($img['filename']) ?>">
+                    <img src="<?= htmlspecialchars($img['path']) ?>" alt="<?= htmlspecialchars($img['filename']) ?>">
                     
                     <div class="tag-overlay">
                         <?php foreach ($img['tags'] as $tag): ?>

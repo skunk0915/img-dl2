@@ -31,6 +31,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>管理画面ログイン</title>
         <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
+        <link rel="stylesheet" href="css/neumorphism.css?v=<?= time() ?>">
     </head>
     <body>
         <div class="container">
@@ -138,6 +139,7 @@ $images = getImages($sort, []);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>画像管理画面</title>
     <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="css/neumorphism.css?v=<?= time() ?>">
     <style>
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .admin-panel { background: var(--surface); padding: 20px; border-radius: 20px; margin-bottom: 30px; }

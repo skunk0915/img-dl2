@@ -25,7 +25,7 @@ $images = getImages($sort, []);
 
         <div class="admin-panel" style="margin-bottom: 40px;">
             <div class="admin-panel-header">
-                <h2>検索・フィルター</h2>
+                <h2>検索</h2>
                 <span class="toggle-icon">▼</span>
             </div>
             <div class="admin-panel-content">

@@ -1,4 +1,5 @@
 <?php 
+session_start();
 header('Content-Type: text/html; charset=UTF-8'); 
 require_once 'functions.php';
 
@@ -25,6 +26,9 @@ $images = getImages($sort, []);
     </div>
 
     <div class="container">
+        <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true): ?>
+            <a href="admin.php" class="nav-btn submit-btn" style="position: absolute; top: 20px; right: 20px;text-decoration: none; padding: 10px 20px; font-size: 0.9rem; background: var(--primary);">管理画面</a>
+        <?php endif; ?>
         <img src="logo.png" alt="" class="logo">
 
         <!-- フィルタリング・ソートフォーム -->

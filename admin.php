@@ -148,8 +148,7 @@ $images = getImages($sort, []);
         .tag-label { background: var(--bg-dark); padding: 5px 10px; border-radius: 15px; cursor: pointer; user-select: none; }
         .tag-label input { margin-right: 5px; }
         .admin-gallery-item { position: relative; cursor: pointer; }
-        .delete-btn { position: absolute; top: 10px; right: 10px; background: var(--error); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; opacity: 0.8; z-index: 10; }
-        .delete-btn:hover { opacity: 1; }
+        .delete-btn { z-index: 10; }
         .item-info { padding: 10px; font-size: 0.8rem; color: var(--text-secondary); }
     </style>
 </head>
@@ -157,7 +156,10 @@ $images = getImages($sort, []);
     <div class="container">
         <div class="admin-header">
             <h1 class="title" style="margin-bottom: 0;">管理画面</h1>
-            <a href="?logout=1" class="submit-btn" style="text-decoration: none; padding: 10px 20px; font-size: 0.9rem;">ログアウト</a>
+            <div style="display: flex; gap: 10px;">
+                <a href="index.php" class="submit-btn" style="text-decoration: none; padding: 10px 20px; font-size: 0.9rem; background: var(--primary);">メイン画面</a>
+                <a href="?logout=1" class="submit-btn" style="text-decoration: none; padding: 10px 20px; font-size: 0.9rem;">ログアウト</a>
+            </div>
         </div>
 
         <?php if (isset($message)) echo '<p style="color: #4caf50; margin-bottom: 20px;">' . $message . '</p>'; ?>

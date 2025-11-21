@@ -365,28 +365,6 @@ body {
     min-height: 20px;
 }
 
-/* レスポンシブ */
-@media (max-width: 768px) {
-    .gallery {
-        /* grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); */
-        gap: calc(30px / var(--gallery-columns));
-        padding: 10px;
-    }
-
-    .title {
-        font-size: 1.8rem;
-        margin-bottom: 30px;
-    }
-
-    .modal-content {
-        padding: 20px;
-    }
-
-    .password-modal-content {
-        max-width: 90%;
-    }
-}
-
 /* Admin Styles */
 .admin-header {
     display: flex;
@@ -618,4 +596,32 @@ body {
     box-shadow:
         2px 2px 4px var(--shadow-dark),
         -1px -1px 0px var(--shadow-light)
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+    .gallery {
+        /* grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); */
+        gap: calc(30px / var(--gallery-columns));
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .password-modal-content {
+        max-width: 90%;
+    }
+
+    /* スマホでタグバッジを小さく */
+    .tag-overlay .tag-badge {
+        font-size: calc(0.5rem / var(--gallery-columns) * 4);
+        padding: calc(2px / var(--gallery-columns) * 4) calc(6px / var(--gallery-columns) * 4);
+    }
 }

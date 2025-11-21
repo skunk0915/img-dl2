@@ -6,9 +6,7 @@
 
 session_start();
 require_once 'functions.php';
-
-// Password configuration
-define('ADMIN_PASSWORD', 'password');
+require_once 'config.php';
 
 // Handle Login
 if (isset($_POST['login_password'])) {

@@ -1,9 +1,8 @@
 <?php
+require_once 'config.php';
+
 // JSONレスポンスヘッダー
 header('Content-Type: application/json; charset=UTF-8');
-
-// パスワード設定（本番環境では環境変数や設定ファイルから読み込むことを推奨）
-define('DOWNLOAD_PASSWORD', 'password');
 
 // POSTリクエストの確認
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

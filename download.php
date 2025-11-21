@@ -69,8 +69,8 @@ if (!in_array($ext, $allowedExts)) {
     exit;
 }
 
-// imgディレクトリ内のファイルのみ許可
-if (strpos(realpath($imagePath), realpath('img/')) !== 0) {
+// uploadディレクトリ内のファイルのみ許可
+if (strpos(realpath($imagePath), realpath('upload/')) !== 0) {
     echo json_encode([
         'success' => false,
         'message' => '不正なファイルパスです'

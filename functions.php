@@ -2,8 +2,8 @@
 // functions.php
 
 define('DATA_FILE', 'data.json');
-define('IMG_DIR', 'img/');
-define('THUMB_DIR', 'img/thumb/');
+define('IMG_DIR', 'upload/');
+define('THUMB_DIR', 'upload/thumb/');
 
 /**
  * Load data from JSON file

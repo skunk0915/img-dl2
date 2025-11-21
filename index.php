@@ -29,7 +29,7 @@ $images = getImages($sort, []);
         <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true): ?>
             <a href="admin.php" class="nav-btn submit-btn" style="position: absolute; top: 20px; right: 20px;text-decoration: none; padding: 10px 20px; font-size: 0.9rem; background: var(--primary);">管理画面</a>
         <?php endif; ?>
-        <img src="logo.png" alt="" class="logo">
+        <img src="img/logo.png" alt="" class="logo">
 
         <!-- フィルタリング・ソートフォーム -->
 

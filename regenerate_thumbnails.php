@@ -145,7 +145,7 @@ if (isset($_POST['regenerate'])) {
                     
                     <div class="form-group">
                         <label>透かしの不透明度 (0-100)</label>
-                        <input type="range" name="watermark_opacity" min="0" max="100" value="30" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
+                        <input type="range" name="watermark_opacity" min="0" max="100" value="70" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
                         <span style="display: inline-block; margin-left: 10px; color: var(--text-secondary);">70</span>
                     </div>
                     

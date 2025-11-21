@@ -317,18 +317,13 @@ body {
     border: none;
     border-radius: 50px;
     color: var(--text-primary);
-    box-shadow:
-        inset 4px 4px 8px var(--shadow-dark),
-        inset -4px -4px 8px var(--shadow-light);
+    box-shadow: inset 2px 2px 8px var(--shadow-dark),
+        inset -2px -2px 7px var(--shadow-light);
     outline: none;
     transition: box-shadow 0.3s ease;
 }
 
-#passwordInput:focus {
-    box-shadow:
-        inset 6px 6px 12px var(--shadow-dark),
-        inset -6px -6px 12px var(--shadow-light);
-}
+#passwordInput:focus {}
 
 #passwordInput::placeholder {
     color: var(--text-secondary);
@@ -519,10 +514,10 @@ body {
     left: 0;
     width: 100%;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-    padding: 20px 10px 10px;
+    padding: calc(5px / var(--gallery-columns) * 4);
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: calc(5px / var(--gallery-columns) * 4);
     pointer-events: none;
 }
 

@@ -9,6 +9,23 @@ const closePasswordBtn = document.querySelector('.close-password');
 const passwordInput = document.getElementById('passwordInput');
 const passwordSubmit = document.getElementById('passwordSubmit');
 const errorMessage = document.getElementById('errorMessage');
+const sizeSlider = document.getElementById('sizeSlider');
+
+// 画像サイズスライダー
+if (sizeSlider) {
+    // Load saved size
+    const savedSize = localStorage.getItem('galleryItemSize');
+    if (savedSize) {
+        sizeSlider.value = parseInt(savedSize);
+        document.documentElement.style.setProperty('--gallery-item-size', savedSize);
+    }
+
+    sizeSlider.addEventListener('input', function () {
+        const newVal = this.value + 'px';
+        document.documentElement.style.setProperty('--gallery-item-size', newVal);
+        localStorage.setItem('galleryItemSize', newVal);
+    });
+}
 
 // 現在選択されている画像情報
 let currentOriginalPath = '';

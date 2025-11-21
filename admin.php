@@ -182,6 +182,10 @@ $images = getImages($sort, $filterTags);
             <h2>一覧・検索</h2>
             <form method="get">
                 <div class="form-group">
+                    <label>画像サイズ変更</label>
+                    <input type="range" id="sizeSlider" min="100" max="500" value="250" class="form-control" style="padding: 0;">
+                </div>
+                <div class="form-group">
                     <label>ソート</label>
                     <select name="sort" class="form-control" onchange="this.form.submit()">
                         <option value="date_desc" <?= $sort === 'date_desc' ? 'selected' : '' ?>>アップロード日 (新しい順)</option>
@@ -268,6 +272,23 @@ $images = getImages($sort, $filterTags);
                 closeEditModal();
             }
         });
+
+        // Image Size Slider
+        const sizeSlider = document.getElementById('sizeSlider');
+        if (sizeSlider) {
+            // Load saved size
+            const savedSize = localStorage.getItem('galleryItemSize');
+            if (savedSize) {
+                sizeSlider.value = parseInt(savedSize);
+                document.documentElement.style.setProperty('--gallery-item-size', savedSize);
+            }
+
+            sizeSlider.addEventListener('input', function() {
+                const newVal = this.value + 'px';
+                document.documentElement.style.setProperty('--gallery-item-size', newVal);
+                localStorage.setItem('galleryItemSize', newVal);
+            });
+        }
     </script>
 </body>
 </html>

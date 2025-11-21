@@ -13,6 +13,7 @@
     --shadow-dark: rgba(0, 0, 0, 0.5);
     --accent: #6c63ff;
     --error: #ff6b6b;
+    --gallery-item-size: 250px;
 }
 
 body {
@@ -48,7 +49,7 @@ body {
 /* ギャラリーグリッド */
 .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(var(--gallery-item-size), 1fr));
     gap: 30px;
     padding: 20px;
 }

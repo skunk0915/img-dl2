@@ -33,6 +33,11 @@ $images = getImages($sort, $filterTags);
                     </select>
                 </div>
                 <div class="form-group">
+                    <label>画像サイズ変更</label>
+                    <input type="range" id="sizeSlider" min="100" max="500" value="250" class="form-control" style="padding: 0;">
+                </div>
+
+                <div class="form-group">
                     <label>タグフィルター</label>
                     <div class="tag-checkboxes">
                         <?php foreach ($allTags as $tag): ?>

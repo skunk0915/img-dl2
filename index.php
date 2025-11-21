@@ -15,7 +15,7 @@ $images = getImages($sort, []);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>画像ギャラリー</title>
     <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="css/neumorphism.css?v=<?= time() ?>">
+
 </head>
 <body>
     <div class="container">

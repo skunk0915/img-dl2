@@ -36,7 +36,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>サムネイル再生成 - ログイン</title>
         <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
-        <link rel="stylesheet" href="css/neumorphism.css?v=<?= time() ?>">
+
     </head>
     <body>
         <div class="container">
@@ -90,7 +90,7 @@ if (isset($_POST['regenerate'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>サムネイル再生成</title>
     <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="css/neumorphism.css?v=<?= time() ?>">
+
     <style>
         .result-box {
             background: var(--surface);

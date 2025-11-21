@@ -9,7 +9,7 @@
     --surface: #323232;
     --text-primary: #e0e0e0;
     --text-secondary: #a0a0a0;
-    --shadow-light: rgba(255, 255, 255, 0.07);
+    --shadow-light: rgba(255, 255, 255, 0.2);
     --shadow-dark: rgba(0, 0, 0, 0.5);
     --accent: #6c63ff;
     --error: #ff6b6b;
@@ -64,21 +64,21 @@ body {
     background: var(--surface);
     box-shadow:
         8px 8px 16px var(--shadow-dark),
-        -8px -8px 16px var(--shadow-light);
+        0px -2px 4px var(--shadow-light);
     transition: all 0.3s ease;
 }
 
 .gallery-item:hover {
     box-shadow:
         12px 12px 24px var(--shadow-dark),
-        -12px -12px 24px var(--shadow-light);
+        -0px -2px 4px var(--shadow-light);
     /* transform: translateY(-5px); */
 }
 
 .gallery-item:active {
     box-shadow:
         inset 4px 4px 8px var(--shadow-dark),
-        inset -4px -4px 8px var(--shadow-light);
+        inset 0px -2px 4px var(--shadow-light);
     transform: translateY(0);
 }
 
@@ -126,9 +126,9 @@ body {
     padding: 40px;
     max-width: 90%;
     max-height: 90%;
-    box-shadow:
+    /* box-shadow:
         20px 20px 40px var(--shadow-dark),
-        -20px -20px 40px var(--shadow-light);
+        -20px -20px 40px var(--shadow-light); */
     animation: slideUp 0.4s ease;
 }
 
@@ -184,21 +184,21 @@ body {
     cursor: pointer;
     box-shadow:
         6px 6px 12px var(--shadow-dark),
-        -6px -6px 12px var(--shadow-light);
+        -2px -2px 3px var(--shadow-light);
     transition: all 0.3s ease;
 }
 
 .download-btn:hover {
     box-shadow:
         8px 8px 16px var(--shadow-dark),
-        -8px -8px 16px var(--shadow-light);
+        -4px -4px 3px var(--shadow-light);
     /* transform: translateY(-2px); */
 }
 
 .download-btn:active {
     box-shadow:
         inset 4px 4px 8px var(--shadow-dark),
-        inset -4px -4px 8px var(--shadow-light);
+        inset -4px -4px 3px var(--shadow-light);
     transform: translateY(0);
 }
 
@@ -325,7 +325,7 @@ body {
     margin-bottom: 30px;
     box-shadow:
         8px 8px 16px var(--shadow-dark),
-        -8px -8px 16px var(--shadow-light);
+        0px 0px 4px var(--shadow-light);
 }
 
 .admin-panel h2 {
@@ -381,13 +381,13 @@ body {
     border: none;
     background: var(--bg-dark);
     color: var(--text-primary);
-    box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+    box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 2px var(--shadow-light);
     outline: none;
     transition: box-shadow 0.3s ease;
 }
 
 .form-control:focus {
-    box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+    box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 2px var(--shadow-light);
 }
 
 .tag-checkboxes {
@@ -502,46 +502,47 @@ body {
 
 .admin-modal-form .submit-btn {
     margin: 1em 0 0;
+}
 
-    /* Neumorphism Switch */
-    .match-mode-switch {
-        display: flex;
-        background: var(--bg-dark);
-        padding: 5px;
-        border-radius: 50px;
-        box-shadow:
-            inset 4px 4px 8px var(--shadow-dark),
-            inset -4px -4px 8px var(--shadow-light);
-        width: fit-content;
-        margin-bottom: 20px !important;
-    }
+/* Neumorphism Switch */
+.match-mode-switch {
+    display: flex;
+    background: var(--bg-dark);
+    padding: 5px;
+    border-radius: 50px;
+    box-shadow:
+        inset 2px 2px 4px var(--shadow-dark),
+        inset -2px -2px 3px var(--shadow-light);
+    width: fit-content;
+    margin-bottom: 20px !important;
+}
 
-    .match-mode-option {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px 20px;
-        cursor: pointer;
-        border-radius: 50px;
-        color: var(--text-secondary);
-        font-weight: bold;
-        transition: all 0.3s ease;
-        user-select: none;
-    }
+.match-mode-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 50px;
+    color: var(--text-secondary);
+    font-weight: bold;
+    transition: all 0.3s ease;
+    user-select: none;
+}
 
-    .match-mode-option input {
-        display: none;
-    }
+.match-mode-option input {
+    display: none;
+}
 
-    .match-mode-option:hover {
-        color: var(--text-primary);
-    }
+.match-mode-option:hover {
+    color: var(--text-primary);
+}
 
-    .match-mode-option.active {
-        color: var(--text-primary);
-        background: var(--surface);
-        box-shadow:
-            4px 4px 8px var(--shadow-dark),
-            -4px -4px 8px var(--shadow-light);
-    }
+.match-mode-option.active {
+    color: var(--text-primary);
+    background: var(--surface);
+    box-shadow:
+        2px 2px 4px var(--shadow-dark),
+        -1px -1px 0px var(--shadow-light)
+}

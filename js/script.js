@@ -11,23 +11,24 @@ const passwordSubmit = document.getElementById('passwordSubmit');
 const errorMessage = document.getElementById('errorMessage');
 
 // 現在選択されている画像情報
-let currentImagePath = '';
+let currentOriginalPath = '';
 let currentFileName = '';
 
 // ギャラリーアイテムクリックイベント
 galleryItems.forEach(item => {
-    item.addEventListener('click', function() {
-        currentImagePath = this.getAttribute('data-image');
+    item.addEventListener('click', function () {
+        const thumbPath = this.getAttribute('data-thumb');
+        currentOriginalPath = this.getAttribute('data-original');
         currentFileName = this.getAttribute('data-filename');
 
-        modalImage.src = currentImagePath;
+        modalImage.src = thumbPath;
         imageModal.classList.add('active');
         document.body.style.overflow = 'hidden';
     });
 });
 
 // ダウンロードボタンクリックイベント
-downloadBtn.addEventListener('click', function() {
+downloadBtn.addEventListener('click', function () {
     // 画像モーダルを閉じる
     imageModal.classList.remove('active');
 
@@ -39,12 +40,12 @@ downloadBtn.addEventListener('click', function() {
 });
 
 // パスワード送信
-passwordSubmit.addEventListener('click', function() {
+passwordSubmit.addEventListener('click', function () {
     submitPassword();
 });
 
 // Enterキーでパスワード送信
-passwordInput.addEventListener('keypress', function(e) {
+passwordInput.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         submitPassword();
     }
@@ -70,36 +71,36 @@ function submitPassword() {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `password=${encodeURIComponent(password)}&image=${encodeURIComponent(currentImagePath)}&filename=${encodeURIComponent(currentFileName)}`
+        body: `password=${encodeURIComponent(password)}&image=${encodeURIComponent(currentOriginalPath)}&filename=${encodeURIComponent(currentFileName)}`
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // パスワードが正しい場合、ダウンロードを開始
-            downloadImage(data.download_url);
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // パスワードが正しい場合、ダウンロードを開始
+                downloadImage(data.download_url);
 
-            // モーダルを閉じる
-            passwordModal.classList.remove('active');
-            document.body.style.overflow = 'auto';
+                // モーダルを閉じる
+                passwordModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
 
-            // リセット
-            passwordInput.value = '';
-            errorMessage.textContent = '';
-        } else {
-            // パスワードが間違っている場合
-            errorMessage.textContent = data.message || 'パスワードが正しくありません';
-            passwordInput.value = '';
-            passwordInput.focus();
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        errorMessage.textContent = 'エラーが発生しました。もう一度お試しください。';
-    })
-    .finally(() => {
-        passwordSubmit.disabled = false;
-        passwordSubmit.textContent = 'ダウンロード';
-    });
+                // リセット
+                passwordInput.value = '';
+                errorMessage.textContent = '';
+            } else {
+                // パスワードが間違っている場合
+                errorMessage.textContent = data.message || 'パスワードが正しくありません';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            errorMessage.textContent = 'エラーが発生しました。もう一度お試しください。';
+        })
+        .finally(() => {
+            passwordSubmit.disabled = false;
+            passwordSubmit.textContent = 'ダウンロード';
+        });
 }
 
 // 画像をダウンロード
@@ -113,13 +114,13 @@ function downloadImage(url) {
 }
 
 // 画像モーダルを閉じる
-closeBtn.addEventListener('click', function() {
+closeBtn.addEventListener('click', function () {
     imageModal.classList.remove('active');
     document.body.style.overflow = 'auto';
 });
 
 // パスワードモーダルを閉じる
-closePasswordBtn.addEventListener('click', function() {
+closePasswordBtn.addEventListener('click', function () {
     passwordModal.classList.remove('active');
     document.body.style.overflow = 'auto';
     passwordInput.value = '';
@@ -127,14 +128,14 @@ closePasswordBtn.addEventListener('click', function() {
 });
 
 // モーダル外クリックで閉じる
-imageModal.addEventListener('click', function(e) {
+imageModal.addEventListener('click', function (e) {
     if (e.target === imageModal) {
         imageModal.classList.remove('active');
         document.body.style.overflow = 'auto';
     }
 });
 
-passwordModal.addEventListener('click', function(e) {
+passwordModal.addEventListener('click', function (e) {
     if (e.target === passwordModal) {
         passwordModal.classList.remove('active');
         document.body.style.overflow = 'auto';
@@ -144,7 +145,7 @@ passwordModal.addEventListener('click', function(e) {
 });
 
 // ESCキーでモーダルを閉じる
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
         if (imageModal.classList.contains('active')) {
             imageModal.classList.remove('active');

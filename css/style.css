@@ -25,6 +25,99 @@ body {
     padding: 20px;
 }
 
+/* ローディング画面 */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loading-spinner {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--surface);
+    box-shadow:
+        inset 8px 8px 16px var(--shadow-dark),
+        inset -8px -8px 16px var(--shadow-light);
+    position: relative;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-spinner::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    border-top-color: var(--accent);
+    border-right-color: var(--accent);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow:
+            inset 8px 8px 16px var(--shadow-dark),
+            inset -8px -8px 16px var(--shadow-light);
+    }
+
+    50% {
+        box-shadow:
+            inset 12px 12px 24px var(--shadow-dark),
+            inset -12px -12px 24px var(--shadow-light);
+    }
+}
+
+.loading-text {
+    margin-top: 30px;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    animation: fadeInOut 1.5s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
 .logo {
     display: block;
     margin: 0 auto 1em;
@@ -66,11 +159,6 @@ body {
         8px 8px 16px var(--shadow-dark),
         0px -2px 1px var(--shadow-light);
     transition: all 0.3s ease;
-}
-
-.gallery-item:hover {
-
-    /* transform: translateY(-5px); */
 }
 
 .gallery-item:active {
@@ -392,11 +480,7 @@ body {
     cursor: pointer;
     user-select: none;
     transition: all 0.3s ease;
-    box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
-}
-
-.tag-label:hover {
-    /* transform: translateY(-2px); */
+    box-shadow: 4px 4px 8px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
 }
 
 .tag-label input {

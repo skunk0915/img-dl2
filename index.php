@@ -18,6 +18,12 @@ $images = getImages($sort, []);
 
 </head>
 <body>
+    <!-- ローディング画面 -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">読み込み中...</p>
+    </div>
+
     <div class="container">
         <img src="logo.png" alt="" class="logo">
 
@@ -67,7 +73,7 @@ $images = getImages($sort, []);
             </div>
         </div>
 
-        <div class="gallery">
+        <div class="gallery" id="gallery" style="display: none;">
             <?php foreach ($images as $img): ?>
                 <div class="gallery-item" data-thumb="<?= htmlspecialchars($img['thumb']) ?>" data-original="<?= htmlspecialchars($img['path']) ?>" data-filename="<?= htmlspecialchars($img['filename']) ?>" data-tags='<?= json_encode($img['tags'], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
                     <img src="<?= htmlspecialchars($img['thumb']) ?>" alt="<?= htmlspecialchars($img['filename']) ?>">

@@ -1,3 +1,24 @@
+// ページロード完了時の処理
+window.addEventListener('load', function () {
+    const loadingScreen = document.getElementById('loadingScreen');
+    const gallery = document.getElementById('gallery');
+
+    if (loadingScreen) {
+        // ローディング画面をフェードアウト
+        loadingScreen.classList.add('hidden');
+
+        // アニメーション完了後に要素を削除
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
+
+    if (gallery) {
+        // ギャラリーを表示
+        gallery.style.display = 'grid';
+    }
+});
+
 // DOM要素の取得
 const galleryItems = document.querySelectorAll('.gallery-item');
 const imageModal = document.getElementById('imageModal');

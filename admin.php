@@ -30,7 +30,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>管理画面ログイン</title>
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
     </head>
     <body>
         <div class="container">
@@ -137,7 +137,7 @@ $images = getImages($sort, $filterTags);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>画像管理画面</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
     <style>
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .admin-panel { background: var(--surface); padding: 20px; border-radius: 20px; margin-bottom: 30px; }
@@ -164,48 +164,58 @@ $images = getImages($sort, $filterTags);
         <?php if (isset($error)) echo '<p class="error-message" style="margin-bottom: 20px;">' . $error . '</p>'; ?>
 
         <div class="admin-panel">
-            <h2>新規アップロード</h2>
-            <form method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>画像ファイル</label>
-                    <input type="file" name="image" accept="image/*" required class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>タグ (カンマ区切り)</label>
-                    <input type="text" name="tags" placeholder="例: 風景, 夏, 海" class="form-control">
-                </div>
-                <button type="submit" class="submit-btn">アップロード</button>
-            </form>
+            <div class="admin-panel-header">
+                <h2>新規アップロード</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="admin-panel-content">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>画像ファイル</label>
+                        <input type="file" name="image" accept="image/*" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>タグ (カンマ区切り)</label>
+                        <input type="text" name="tags" placeholder="例: 風景, 夏, 海" class="form-control">
+                    </div>
+                    <button type="submit" class="submit-btn">アップロード</button>
+                </form>
+            </div>
         </div>
 
         <div class="admin-panel">
-            <h2>一覧・検索</h2>
-            <form method="get">
-                <div class="form-group">
-                    <label>画像サイズ変更</label>
-                    <input type="range" id="sizeSlider" min="100" max="500" value="250" class="form-control" style="padding: 0;">
-                </div>
-                <div class="form-group">
-                    <label>ソート</label>
-                    <select name="sort" class="form-control" onchange="this.form.submit()">
-                        <option value="date_desc" <?= $sort === 'date_desc' ? 'selected' : '' ?>>アップロード日 (新しい順)</option>
-                        <option value="date_asc" <?= $sort === 'date_asc' ? 'selected' : '' ?>>アップロード日 (古い順)</option>
-                        <option value="name_asc" <?= $sort === 'name_asc' ? 'selected' : '' ?>>ファイル名 (昇順)</option>
-                        <option value="name_desc" <?= $sort === 'name_desc' ? 'selected' : '' ?>>ファイル名 (降順)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>タグフィルター</label>
-                    <div class="tag-checkboxes">
-                        <?php foreach ($allTags as $tag): ?>
-                            <label class="tag-label">
-                                <input type="checkbox" name="filter_tags[]" value="<?= htmlspecialchars($tag) ?>" <?= in_array($tag, $filterTags) ? 'checked' : '' ?> onchange="this.form.submit()">
-                                <?= htmlspecialchars($tag) ?>
-                            </label>
-                        <?php endforeach; ?>
+            <div class="admin-panel-header">
+                <h2>一覧・検索</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="admin-panel-content">
+                <form method="get">
+                    <div class="form-group">
+                        <label>画像サイズ変更</label>
+                        <input type="range" id="sizeSlider" min="100" max="500" value="250" class="form-control" style="padding: 0;">
                     </div>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label>ソート</label>
+                        <select name="sort" class="form-control" onchange="this.form.submit()">
+                            <option value="date_desc" <?= $sort === 'date_desc' ? 'selected' : '' ?>>アップロード日 (新しい順)</option>
+                            <option value="date_asc" <?= $sort === 'date_asc' ? 'selected' : '' ?>>アップロード日 (古い順)</option>
+                            <option value="name_asc" <?= $sort === 'name_asc' ? 'selected' : '' ?>>ファイル名 (昇順)</option>
+                            <option value="name_desc" <?= $sort === 'name_desc' ? 'selected' : '' ?>>ファイル名 (降順)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>タグフィルター</label>
+                        <div class="tag-checkboxes">
+                            <?php foreach ($allTags as $tag): ?>
+                                <label class="tag-label">
+                                    <input type="checkbox" name="filter_tags[]" value="<?= htmlspecialchars($tag) ?>" <?= in_array($tag, $filterTags) ? 'checked' : '' ?> onchange="this.form.submit()">
+                                    <?= htmlspecialchars($tag) ?>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="gallery">
@@ -242,53 +252,7 @@ $images = getImages($sort, $filterTags);
         </div>
     </div>
 
-    <script>
-        const editModal = document.getElementById('editModal');
-        const editModalImage = document.getElementById('editModalImage');
-        const editModalFilename = document.getElementById('editModalFilename');
-        const editModalTags = document.getElementById('editModalTags');
 
-        function openEditModal(imagePath, filename, tags) {
-            editModalImage.src = imagePath;
-            editModalFilename.value = filename;
-            editModalTags.value = tags;
-            editModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeEditModal() {
-            editModal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        editModal.addEventListener('click', function(e) {
-            if (e.target === editModal) {
-                closeEditModal();
-            }
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && editModal.classList.contains('active')) {
-                closeEditModal();
-            }
-        });
-
-        // Image Size Slider
-        const sizeSlider = document.getElementById('sizeSlider');
-        if (sizeSlider) {
-            // Load saved size
-            const savedSize = localStorage.getItem('galleryItemSize');
-            if (savedSize) {
-                sizeSlider.value = parseInt(savedSize);
-                document.documentElement.style.setProperty('--gallery-item-size', savedSize);
-            }
-
-            sizeSlider.addEventListener('input', function() {
-                const newVal = this.value + 'px';
-                document.documentElement.style.setProperty('--gallery-item-size', newVal);
-                localStorage.setItem('galleryItemSize', newVal);
-            });
-        }
-    </script>
+    <script src="js/script.js?v=<?= time() ?>"></script>
 </body>
 </html>

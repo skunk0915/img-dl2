@@ -14,41 +14,48 @@ $images = getImages($sort, $filterTags);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>画像ギャラリー</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
 </head>
 <body>
     <div class="container">
         <img src="logo.png" alt="" class="logo">
 
         <!-- フィルタリング・ソートフォーム -->
-        <div class="admin-panel" style="margin-bottom: 40px;">
-            <form method="get" id="filterForm">
-                <div class="form-group">
-                    <label>ソート</label>
-                    <select name="sort" class="form-control" onchange="this.form.submit()">
-                        <option value="date_desc" <?= $sort === 'date_desc' ? 'selected' : '' ?>>アップロード日 (新しい順)</option>
-                        <option value="date_asc" <?= $sort === 'date_asc' ? 'selected' : '' ?>>アップロード日 (古い順)</option>
-                        <option value="name_asc" <?= $sort === 'name_asc' ? 'selected' : '' ?>>ファイル名 (昇順)</option>
-                        <option value="name_desc" <?= $sort === 'name_desc' ? 'selected' : '' ?>>ファイル名 (降順)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>画像サイズ変更</label>
-                    <input type="range" id="sizeSlider" min="100" max="500" value="250" class="form-control" style="padding: 0;">
-                </div>
 
-                <div class="form-group">
-                    <label>タグフィルター</label>
-                    <div class="tag-checkboxes">
-                        <?php foreach ($allTags as $tag): ?>
-                            <label class="tag-label">
-                                <input type="checkbox" name="filter_tags[]" value="<?= htmlspecialchars($tag) ?>" <?= in_array($tag, $filterTags) ? 'checked' : '' ?> onchange="this.form.submit()">
-                                <?= htmlspecialchars($tag) ?>
-                            </label>
-                        <?php endforeach; ?>
+        <div class="admin-panel" style="margin-bottom: 40px;">
+            <div class="admin-panel-header">
+                <h2>検索・フィルター</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="admin-panel-content">
+                <form method="get" id="filterForm">
+                    <div class="form-group">
+                        <label>ソート</label>
+                        <select name="sort" class="form-control" onchange="this.form.submit()">
+                            <option value="date_desc" <?= $sort === 'date_desc' ? 'selected' : '' ?>>アップロード日 (新しい順)</option>
+                            <option value="date_asc" <?= $sort === 'date_asc' ? 'selected' : '' ?>>アップロード日 (古い順)</option>
+                            <option value="name_asc" <?= $sort === 'name_asc' ? 'selected' : '' ?>>ファイル名 (昇順)</option>
+                            <option value="name_desc" <?= $sort === 'name_desc' ? 'selected' : '' ?>>ファイル名 (降順)</option>
+                        </select>
                     </div>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label>画像サイズ変更</label>
+                        <input type="range" id="sizeSlider" min="100" max="500" value="250" class="form-control" style="padding: 0;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>タグフィルター</label>
+                        <div class="tag-checkboxes">
+                            <?php foreach ($allTags as $tag): ?>
+                                <label class="tag-label">
+                                    <input type="checkbox" name="filter_tags[]" value="<?= htmlspecialchars($tag) ?>" <?= in_array($tag, $filterTags) ? 'checked' : '' ?> onchange="this.form.submit()">
+                                    <?= htmlspecialchars($tag) ?>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="gallery">

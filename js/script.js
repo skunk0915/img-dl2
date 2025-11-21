@@ -45,28 +45,34 @@ galleryItems.forEach(item => {
 });
 
 // ダウンロードボタンクリックイベント
-downloadBtn.addEventListener('click', function () {
-    // 画像モーダルを閉じる
-    imageModal.classList.remove('active');
+if (downloadBtn) {
+    downloadBtn.addEventListener('click', function () {
+        // 画像モーダルを閉じる
+        imageModal.classList.remove('active');
 
-    // パスワードモーダルを開く
-    passwordModal.classList.add('active');
-    passwordInput.value = '';
-    errorMessage.textContent = '';
-    passwordInput.focus();
-});
+        // パスワードモーダルを開く
+        passwordModal.classList.add('active');
+        passwordInput.value = '';
+        errorMessage.textContent = '';
+        passwordInput.focus();
+    });
+}
 
 // パスワード送信
-passwordSubmit.addEventListener('click', function () {
-    submitPassword();
-});
+if (passwordSubmit) {
+    passwordSubmit.addEventListener('click', function () {
+        submitPassword();
+    });
+}
 
 // Enterキーでパスワード送信
-passwordInput.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        submitPassword();
-    }
-});
+if (passwordInput) {
+    passwordInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            submitPassword();
+        }
+    });
+}
 
 // パスワード送信処理
 function submitPassword() {
@@ -131,35 +137,43 @@ function downloadImage(url) {
 }
 
 // 画像モーダルを閉じる
-closeBtn.addEventListener('click', function () {
-    imageModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-});
-
-// パスワードモーダルを閉じる
-closePasswordBtn.addEventListener('click', function () {
-    passwordModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-    passwordInput.value = '';
-    errorMessage.textContent = '';
-});
-
-// モーダル外クリックで閉じる
-imageModal.addEventListener('click', function (e) {
-    if (e.target === imageModal) {
+if (closeBtn) {
+    closeBtn.addEventListener('click', function () {
         imageModal.classList.remove('active');
         document.body.style.overflow = 'auto';
-    }
-});
+    });
+}
 
-passwordModal.addEventListener('click', function (e) {
-    if (e.target === passwordModal) {
+// パスワードモーダルを閉じる
+if (closePasswordBtn) {
+    closePasswordBtn.addEventListener('click', function () {
         passwordModal.classList.remove('active');
         document.body.style.overflow = 'auto';
         passwordInput.value = '';
         errorMessage.textContent = '';
-    }
-});
+    });
+}
+
+// モーダル外クリックで閉じる
+if (imageModal) {
+    imageModal.addEventListener('click', function (e) {
+        if (e.target === imageModal) {
+            imageModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+}
+
+if (passwordModal) {
+    passwordModal.addEventListener('click', function (e) {
+        if (e.target === passwordModal) {
+            passwordModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            passwordInput.value = '';
+            errorMessage.textContent = '';
+        }
+    });
+}
 
 // ESCキーでモーダルを閉じる
 document.addEventListener('keydown', function (e) {
@@ -175,4 +189,22 @@ document.addEventListener('keydown', function (e) {
             errorMessage.textContent = '';
         }
     }
+});
+
+// Admin Panel Accordion
+const adminPanelHeaders = document.querySelectorAll('.admin-panel-header');
+
+adminPanelHeaders.forEach(header => {
+    header.addEventListener('click', function () {
+        const content = this.nextElementSibling;
+        const icon = this.querySelector('.toggle-icon');
+
+        content.classList.toggle('active');
+
+        if (content.classList.contains('active')) {
+            icon.style.transform = 'rotate(180deg)';
+        } else {
+            icon.style.transform = 'rotate(0deg)';
+        }
+    });
 });

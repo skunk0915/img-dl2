@@ -328,9 +328,38 @@ body {
 }
 
 .admin-panel h2 {
-    margin-bottom: 20px;
+    margin-bottom: 0;
     color: var(--text-primary);
     font-size: 1.5rem;
+}
+
+.admin-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding-bottom: 0;
+}
+
+.admin-panel-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out, margin-top 0.3s ease;
+    margin-top: 0;
+}
+
+.admin-panel-content.active {
+    max-height: 1000px;
+    /* 十分な高さを確保 */
+    opacity: 1;
+    margin-top: 20px;
+}
+
+.toggle-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    color: var(--text-secondary);
 }
 
 .form-group {
@@ -467,7 +496,9 @@ body {
 }
 
 .admin-modal-form {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+    text-align: center;
+}
+
+.admin-modal-form .submit-btn {
+    margin: 1em 0 0;
 }

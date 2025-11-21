@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
             
             $dest = IMG_DIR . $filename;
             if (move_uploaded_file($file['tmp_name'], $dest)) {
-                createThumbnail($dest, THUMB_DIR . $filename);
+                createThumbnail($dest, THUMB_DIR . $filename, 'NEOWNDROP', 'center', 70);
                 
                 $data = loadData();
                 $tags = array_filter(array_map('trim', explode(',', $tagsInput)));

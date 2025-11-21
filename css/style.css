@@ -144,7 +144,7 @@ body {
 .gallery {
     display: grid;
     grid-template-columns: repeat(var(--gallery-columns, 4), 1fr);
-    gap: var(--gallery-gap, 30px);
+    gap: calc(70px / var(--gallery-columns));
     padding: 20px;
 }
 
@@ -156,8 +156,8 @@ body {
     cursor: pointer;
     background: var(--surface);
     box-shadow:
-        8px 8px 16px var(--shadow-dark),
-        0px -2px 1px var(--shadow-light);
+        calc(8px / var(--gallery-columns) * 4) calc(8px / var(--gallery-columns) * 4) calc(16px / var(--gallery-columns) * 4) var(--shadow-dark),
+        0px calc(-2px / var(--gallery-columns) * 4) calc(1px / var(--gallery-columns) * 4) var(--shadow-light);
     transition: all 0.3s ease;
 }
 
@@ -369,7 +369,7 @@ body {
 @media (max-width: 768px) {
     .gallery {
         /* grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); */
-        gap: 15px;
+        gap: calc(30px / var(--gallery-columns));
         padding: 10px;
     }
 

@@ -24,9 +24,9 @@ function saveData($data) {
 }
 
 /**
- * Create a thumbnail image with watermark
+ * Create a thumbnail image
  */
-function createThumbnail($source, $destination, $watermarkText = '© 2025', $watermarkPosition = 'bottom-right', $watermarkOpacity = 70) {
+function createThumbnail($source, $destination) {
     list($width, $height, $type) = getimagesize($source);
     
     $newWidth = 0;
@@ -65,83 +65,6 @@ function createThumbnail($source, $destination, $watermarkText = '© 2025', $wat
     }
 
     imagecopyresampled($thumb, $sourceImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-    // Add watermark
-    if (!empty($watermarkText)) {
-        // Enable alpha blending for watermark
-        imagealphablending($thumb, true);
-        
-        // Font settings
-        $fontSize = 12;
-        $fontPath = null;
-        
-        // Try to use a TrueType font if available
-        $possibleFonts = [
-            '/System/Library/Fonts/Helvetica.ttc',
-            '/System/Library/Fonts/HelveticaNeue.ttc',
-            '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
-            '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf'
-        ];
-        
-        foreach ($possibleFonts as $font) {
-            if (file_exists($font)) {
-                $fontPath = $font;
-                break;
-            }
-        }
-        
-        // Calculate text dimensions
-        if ($fontPath) {
-            $bbox = imagettfbbox($fontSize, 0, $fontPath, $watermarkText);
-            $textWidth = abs($bbox[4] - $bbox[0]);
-            $textHeight = abs($bbox[5] - $bbox[1]);
-        } else {
-            // Fallback to built-in font
-            $textWidth = imagefontwidth(3) * strlen($watermarkText);
-            $textHeight = imagefontheight(3);
-        }
-        
-        // Calculate position
-        $padding = 10;
-        switch ($watermarkPosition) {
-            case 'bottom-left':
-                $x = $padding;
-                $y = $newHeight - $padding - $textHeight;
-                break;
-            case 'top-right':
-                $x = $newWidth - $textWidth - $padding;
-                $y = $padding;
-                break;
-            case 'top-left':
-                $x = $padding;
-                $y = $padding;
-                break;
-            case 'center':
-                $x = ($newWidth - $textWidth) / 2;
-                $y = ($newHeight - $textHeight) / 2;
-                break;
-            case 'bottom-right':
-            default:
-                $x = $newWidth - $textWidth - $padding;
-                $y = $newHeight - $padding - $textHeight;
-                break;
-        }
-        
-        // Create semi-transparent background for better visibility
-        $bgOpacity = intval($watermarkOpacity * 0.8 * 127 / 100);
-        $bgColor = imagecolorallocatealpha($thumb, 0, 0, 0, 127 - $bgOpacity);
-        imagefilledrectangle($thumb, $x - 5, $y - 3, $x + $textWidth + 5, $y + $textHeight + 3, $bgColor);
-        
-        // Add watermark text
-        $textOpacity = intval((100 - $watermarkOpacity) * 127 / 100);
-        $textColor = imagecolorallocatealpha($thumb, 255, 255, 255, $textOpacity);
-        
-        if ($fontPath) {
-            imagettftext($thumb, $fontSize, 0, $x, $y + $textHeight, $textColor, $fontPath, $watermarkText);
-        } else {
-            imagestring($thumb, 3, $x, $y, $watermarkText, $textColor);
-        }
-    }
 
     // Save with high compression (low quality)
     switch ($type) {

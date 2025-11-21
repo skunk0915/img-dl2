@@ -13,17 +13,33 @@ const sizeSlider = document.getElementById('sizeSlider');
 
 // 画像サイズスライダー
 if (sizeSlider) {
-    // Load saved size
-    const savedSize = localStorage.getItem('galleryItemSize');
-    if (savedSize) {
-        sizeSlider.value = parseInt(savedSize);
-        document.documentElement.style.setProperty('--gallery-item-size', savedSize);
+    // Helper to set columns and gap
+    const updateGalleryLayout = (sliderValue) => {
+        // Invert: Right (10) = Bigger Images (1 col), Left (1) = Smaller Images (10 cols)
+        // Formula: columns = 11 - sliderValue
+        const columns = 11 - parseInt(sliderValue);
+
+        // Gap calculation: 120 / columns
+        const gap = Math.floor(120 / columns);
+
+        document.documentElement.style.setProperty('--gallery-columns', columns);
+        document.documentElement.style.setProperty('--gallery-gap', gap + 'px');
+    };
+
+    // Load saved size (slider value)
+    const savedSliderValue = localStorage.getItem('gallerySliderValue');
+    if (savedSliderValue) {
+        sizeSlider.value = parseInt(savedSliderValue);
+        updateGalleryLayout(savedSliderValue);
+    } else {
+        // Default
+        updateGalleryLayout(sizeSlider.value);
     }
 
     sizeSlider.addEventListener('input', function () {
-        const newVal = this.value + 'px';
-        document.documentElement.style.setProperty('--gallery-item-size', newVal);
-        localStorage.setItem('galleryItemSize', newVal);
+        const newVal = this.value;
+        updateGalleryLayout(newVal);
+        localStorage.setItem('gallerySliderValue', newVal);
     });
 }
 
@@ -190,16 +206,6 @@ if (passwordModal) {
     });
 }
 
-// editModalのモーダル外クリックで閉じる
-const editModal = document.getElementById('editModal');
-if (editModal) {
-    editModal.addEventListener('click', function (e) {
-        if (e.target === editModal) {
-            closeEditModal();
-        }
-    });
-}
-
 // ESCキーでモーダルを閉じる
 document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
@@ -214,7 +220,7 @@ document.addEventListener('keydown', function (e) {
             if (errorMessage) errorMessage.textContent = '';
         }
         const editModal = document.getElementById('editModal');
-        if (editModal && editModal.classList.contains('active')) {
+        if (editModal && editModal.style.display === 'block') {
             closeEditModal();
         }
     }
@@ -329,7 +335,7 @@ function openEditModal(path, filename, tags) {
         modalImg.src = path;
         filenameInput.value = filename;
         tagsInput.value = tags;
-        modal.classList.add('active');
+        modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
 }
@@ -337,7 +343,7 @@ function openEditModal(path, filename, tags) {
 function closeEditModal() {
     const modal = document.getElementById('editModal');
     if (modal) {
-        modal.classList.remove('active');
+        modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
 }

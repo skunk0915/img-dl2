@@ -9,11 +9,12 @@
     --surface: #323232;
     --text-primary: #e0e0e0;
     --text-secondary: #a0a0a0;
-    --shadow-light: rgba(255, 255, 255, 0.05);
+    --shadow-light: rgba(255, 255, 255, 0.07);
     --shadow-dark: rgba(0, 0, 0, 0.5);
     --accent: #6c63ff;
     --error: #ff6b6b;
-    --gallery-item-size: 250px;
+    --gallery-columns: 4;
+    --gallery-gap: 30px;
 }
 
 body {
@@ -29,11 +30,6 @@ body {
     margin: 0 auto 1em;
     width: auto;
     max-width: 300px;
-}
-
-.notice {
-    margin: 1em 0;
-    text-align: center;
 }
 
 .container {
@@ -54,8 +50,8 @@ body {
 /* ギャラリーグリッド */
 .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--gallery-item-size), 1fr));
-    gap: calc(var(--gallery-item-size) * 0.1);
+    grid-template-columns: repeat(var(--gallery-columns, 4), 1fr);
+    gap: var(--gallery-gap, 30px);
     padding: 20px;
 }
 
@@ -104,8 +100,6 @@ body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
     animation: fadeIn 0.3s ease;
-    justify-content: center;
-    align-items: center;
 }
 
 .modal.active {
@@ -297,8 +291,9 @@ body {
 /* レスポンシブ */
 @media (max-width: 768px) {
     .gallery {
-        grid-template-columns: repeat(auto-fill, minmax(var(--gallery-item-size), 1fr));
-        padding: 5px;
+        /* grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); */
+        gap: 15px;
+        padding: 10px;
     }
 
     .title {
@@ -411,7 +406,9 @@ body {
     box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
 }
 
-
+.tag-label:hover {
+    /* transform: translateY(-2px); */
+}
 
 .tag-label input {
     margin-right: 8px;
@@ -548,4 +545,3 @@ body {
             4px 4px 8px var(--shadow-dark),
             -4px -4px 8px var(--shadow-light);
     }
-}

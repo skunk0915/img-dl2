@@ -31,6 +31,11 @@ body {
     max-width: 300px;
 }
 
+.notice {
+    margin: 1em 0;
+    text-align: center;
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -50,14 +55,14 @@ body {
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(var(--gallery-item-size), 1fr));
-    gap: 30px;
+    gap: calc(var(--gallery-item-size) * 0.1);
     padding: 20px;
 }
 
 .gallery-item {
     position: relative;
     aspect-ratio: 1;
-    border-radius: 20px;
+    border-radius: 5%;
     overflow: hidden;
     cursor: pointer;
     background: var(--surface);
@@ -292,9 +297,8 @@ body {
 /* レスポンシブ */
 @media (max-width: 768px) {
     .gallery {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
-        padding: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(var(--gallery-item-size), 1fr));
+        padding: 5px;
     }
 
     .title {

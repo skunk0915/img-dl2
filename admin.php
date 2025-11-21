@@ -137,7 +137,7 @@ $images = getImages($sort, []);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>画像管理画面</title>
+    <title>管理画面</title>
     <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
     <link rel="stylesheet" href="css/neumorphism.css?v=<?= time() ?>">
     <style>
@@ -194,7 +194,7 @@ $images = getImages($sort, []);
                 <form method="get">
                     <div class="form-group">
                         <label>画像サイズ変更</label>
-                        <input type="range" id="sizeSlider" min="100" max="500" value="250" class="form-control" style="padding: 0;">
+                        <input type="range" id="sizeSlider" min="30" max="1000" value="250" class="form-control" style="padding: 0;">
                     </div>
                     <div class="form-group">
                         <label>ソート</label>

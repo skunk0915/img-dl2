@@ -13,14 +13,17 @@ $images = getImages($sort, []);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>画像ギャラリー</title>
+    <title>NEOWN DROP</title>
     <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
     <link rel="stylesheet" href="css/neumorphism.css?v=<?= time() ?>">
 </head>
 <body>
     <div class="container">
         <img src="logo.png" alt="" class="logo">
-
+        <div class="notice">
+            所属クリエイター専用です。画像をタップしてパスワードを入れるとダウンロード可能です！<br>
+            ※所属クリエイター以外の使用、他人への譲渡や二次利用などの不正行為は厳正に対処致します。
+        </div>
         <!-- フィルタリング・ソートフォーム -->
 
         <div class="admin-panel" style="margin-bottom: 40px;">
@@ -41,7 +44,7 @@ $images = getImages($sort, []);
                     </div>
                     <div class="form-group">
                         <label>画像サイズ変更</label>
-                        <input type="range" id="sizeSlider" min="100" max="500" value="250" class="form-control" style="padding: 0;">
+                        <input type="range" id="sizeSlider" min="30" max="1000" value="250" class="form-control" style="padding: 0;">
                     </div>
 
                     <div class="form-group">

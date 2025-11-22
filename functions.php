@@ -59,17 +59,17 @@ function saveWatermarkSettings($settings) {
 function createThumbnail($source, $destination, $watermarkPosition = 'bottom-right', $watermarkOpacity = 70, $watermarkSize = 30) {
     list($width, $height, $type) = getimagesize($source);
     
-    $newWidth = 0;
-    $newHeight = 0;
-    $maxSide = 300;
+    $newWidth = $width;
+    $newHeight = $height;
+    // $maxSide = 300;
 
-    if ($width > $height) {
-        $newWidth = $maxSide;
-        $newHeight = intval($height * ($maxSide / $width));
-    } else {
-        $newHeight = $maxSide;
-        $newWidth = intval($width * ($maxSide / $height));
-    }
+    // if ($width > $height) {
+    //     $newWidth = $maxSide;
+    //     $newHeight = intval($height * ($maxSide / $width));
+    // } else {
+    //     $newHeight = $maxSide;
+    //     $newWidth = intval($width * ($maxSide / $height));
+    // }
 
     $thumb = imagecreatetruecolor($newWidth, $newHeight);
     

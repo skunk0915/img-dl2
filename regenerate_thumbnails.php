@@ -39,12 +39,12 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     <body>
         <div class="container">
             <h1 class="title">サムネイル再生成 - ログイン</h1>
-            <div class="password-form" style="max-width: 400px; margin: 0 auto;">
+            <div class="password-form">
                 <form method="post">
                     <input type="password" name="login_password" id="passwordInput" placeholder="パスワード" required>
-                    <button type="submit" class="submit-btn" style="margin-top: 20px; width: 100%;">ログイン</button>
+                    <button type="submit" class="submit-btn">ログイン</button>
                 </form>
-                <?php if (isset($error)) echo '<p class="error-message" style="text-align:center;">' . htmlspecialchars($error) . '</p>'; ?>
+                <?php if (isset($error)) echo '<p class="error-message">' . htmlspecialchars($error) . '</p>'; ?>
             </div>
         </div>
     </body>
@@ -97,34 +97,17 @@ $currentSettings = loadWatermarkSettings();
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>サムネイル再生成</title>
     <link rel="stylesheet" href="css/style.css?v=<?= time() ?>">
-
-    <style>
-        .result-box {
-            background: var(--surface);
-            padding: 20px;
-            border-radius: 20px;
-            margin: 20px 0;
-        }
-        .success-list, .error-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-        .success-list li {
-            color: #4caf50;
-            padding: 5px 0;
-        }
-        .error-list li {
-            color: var(--error);
-            padding: 5px 0;
-        }
-    </style>
 </head>
 <body>
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">サムネイルを再生成中...<br>完了までしばらくお待ちください</div>
+    </div>
+
     <div class="container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <div class="admin-header">
             <h1 class="title" style="margin-bottom: 0;">サムネイル再生成</h1>
-            <a href="?logout=1" class="submit-btn" style="text-decoration: none; padding: 10px 20px; font-size: 0.9rem;">ログアウト</a>
+            <a href="?logout=1" class="submit-btn logout-btn">ログアウト</a>
         </div>
 
         <div class="admin-panel">
@@ -149,17 +132,17 @@ $currentSettings = loadWatermarkSettings();
                     
                     <div class="form-group">
                         <label>透かしのサイズ (10-100%)</label>
-                        <input type="range" name="watermark_size" min="10" max="100" value="<?= htmlspecialchars($currentSettings['size']) ?>" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
-                        <span style="display: inline-block; margin-left: 10px; color: var(--text-secondary);"><?= htmlspecialchars($currentSettings['size']) ?></span>
+                        <input type="range" name="watermark_size" min="10" max="100" value="<?= htmlspecialchars($currentSettings['size']) ?>" class="form-control range-input" oninput="this.nextElementSibling.textContent = this.value">
+                        <span class="range-value"><?= htmlspecialchars($currentSettings['size']) ?></span>
                     </div>
 
                     <div class="form-group">
                         <label>透かしの不透明度 (0-100)</label>
-                        <input type="range" name="watermark_opacity" min="0" max="100" value="<?= htmlspecialchars($currentSettings['opacity']) ?>" class="form-control" style="padding: 0;" oninput="this.nextElementSibling.textContent = this.value">
-                        <span style="display: inline-block; margin-left: 10px; color: var(--text-secondary);"><?= htmlspecialchars($currentSettings['opacity']) ?></span>
+                        <input type="range" name="watermark_opacity" min="0" max="100" value="<?= htmlspecialchars($currentSettings['opacity']) ?>" class="form-control range-input" oninput="this.nextElementSibling.textContent = this.value">
+                        <span class="range-value"><?= htmlspecialchars($currentSettings['opacity']) ?></span>
                     </div>
                     
-                    <button type="submit" name="regenerate" class="submit-btn" onclick="return confirm('すべてのサムネイルを再生成します。よろしいですか？');">
+                    <button type="submit" name="regenerate" class="submit-btn" onclick="return confirmAndGenerate();">
                         サムネイルを再生成
                     </button>
                 </form>
@@ -171,7 +154,7 @@ $currentSettings = loadWatermarkSettings();
                 <h2>再生成結果</h2>
                 
                 <?php if (!empty($regenerated)): ?>
-                    <h3 style="color: #4caf50;">成功: <?= count($regenerated) ?>件</h3>
+                    <h3 class="success-heading">成功: <?= count($regenerated) ?>件</h3>
                     <ul class="success-list">
                         <?php foreach ($regenerated as $file): ?>
                             <li>✓ <?= htmlspecialchars($file) ?></li>
@@ -180,7 +163,7 @@ $currentSettings = loadWatermarkSettings();
                 <?php endif; ?>
                 
                 <?php if (!empty($errors)): ?>
-                    <h3 style="color: var(--error); margin-top: 20px;">エラー: <?= count($errors) ?>件</h3>
+                    <h3 class="error-heading">エラー: <?= count($errors) ?>件</h3>
                     <ul class="error-list">
                         <?php foreach ($errors as $error): ?>
                             <li>✗ <?= htmlspecialchars($error) ?></li>
@@ -190,11 +173,20 @@ $currentSettings = loadWatermarkSettings();
             </div>
         <?php endif; ?>
 
-        <div style="margin-top: 30px; text-align: center;">
-            <a href="admin.php" class="submit-btn" style="text-decoration: none; padding: 10px 20px;">管理画面に戻る</a>
-            <a href="index.php" class="submit-btn" style="text-decoration: none; padding: 10px 20px; margin-left: 10px;">ギャラリーを見る</a>
+        <div class="nav-buttons">
+            <a href="admin.php" class="submit-btn">管理画面に戻る</a>
+            <a href="index.php" class="submit-btn">ギャラリーを見る</a>
         </div>
     </div>
     <script src="js/script.js?v=<?= time() ?>"></script>
+    <script>
+        function confirmAndGenerate() {
+            if (confirm('すべてのサムネイルを再生成します。よろしいですか？')) {
+                document.getElementById('loading-overlay').style.display = 'flex';
+                return true;
+            }
+            return false;
+        }
+    </script>
 </body>
 </html>

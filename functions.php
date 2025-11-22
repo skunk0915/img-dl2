@@ -78,7 +78,7 @@ function createThumbnail($source, $destination, $watermarkPosition = 'bottom-rig
             $sourceImage = imagecreatefromjpeg($source);
             break;
         case IMAGETYPE_PNG:
-            $sourceImage = imagecreatefrompng($source);
+            $sourceImage = @imagecreatefrompng($source);
             // Preserve transparency
             imagecolortransparent($thumb, imagecolorallocatealpha($thumb, 0, 0, 0, 127));
             imagealphablending($thumb, false);
@@ -99,7 +99,7 @@ function createThumbnail($source, $destination, $watermarkPosition = 'bottom-rig
     // Apply Watermark
     // Apply Watermark
     if (file_exists(WATERMARK_FILE)) {
-        $watermark = imagecreatefrompng(WATERMARK_FILE);
+        $watermark = @imagecreatefrompng(WATERMARK_FILE);
         $origWmWidth = imagesx($watermark);
         $origWmHeight = imagesy($watermark);
 

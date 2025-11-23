@@ -148,20 +148,47 @@ function createThumbnail($source, $destination, $watermarkPosition = 'bottom-rig
                 $y = $newHeight - $wmHeight - $padding;
         }
 
-        // Apply opacity
-        // imagecopymerge doesn't work well with alpha channels in PNGs.
-        // For true alpha blending with opacity control, we need a custom approach or use imagecopy if opacity is 100.
-        // However, a simple way to handle opacity with PNG watermark is to use imagecopymerge with a workaround
-        // or iterate pixels (slow).
-        // A better approach for modern PHP GD is to use imagecopy() if we pre-process the watermark opacity.
+        // Apply opacity by modifying alpha channel pixel by pixel
+        // This preserves transparency of both the watermark and the background
+        if ($watermarkOpacity < 100) {
+            // Iterate over every pixel
+            for ($x_px = 0; $x_px < $wmWidth; $x_px++) {
+                for ($y_px = 0; $y_px < $wmHeight; $y_px++) {
+                    // Get current color and alpha
+                    $colorIndex = imagecolorat($watermark, $x_px, $y_px);
+                    $alpha = ($colorIndex >> 24) & 0x7F;
+                    
+                    // Calculate new alpha
+                    // 127 is fully transparent, 0 is fully opaque
+                    if ($alpha < 127) {
+                        // Calculate alpha based on opacity
+                        // new_alpha = 127 - ( (127 - current_alpha) * (opacity / 100) )
+                        $newAlpha = 127 - intval((127 - $alpha) * ($watermarkOpacity / 100));
+                        
+                        // Re-allocate color with new alpha
+                        $color = imagecolorsforindex($watermark, $colorIndex);
+                        $newColor = imagecolorallocatealpha(
+                            $watermark, 
+                            $color['red'], 
+                            $color['green'], 
+                            $color['blue'], 
+                            $newAlpha
+                        );
+                        
+                        // Set pixel
+                        imagesetpixel($watermark, $x_px, $y_px, $newColor);
+                    }
+                }
+            }
+        }
+
+        // Copy watermark onto thumbnail
+        // imagecopy respects alpha channel when destination has alpha blending enabled
+        // We must enable blending on the destination so the watermark is composited OVER the background
+        // instead of replacing the pixels (which would lose the background info).
+        imagealphablending($thumb, true);
+        imagecopy($thumb, $watermark, $x, $y, 0, 0, $wmWidth, $wmHeight);
         
-        // Let's try a robust method for opacity:
-        // Create a temporary image for the watermark with the desired opacity
-        $cut = imagecreatetruecolor($wmWidth, $wmHeight);
-        imagecopy($cut, $thumb, 0, 0, $x, $y, $wmWidth, $wmHeight);
-        imagecopy($cut, $watermark, 0, 0, 0, 0, $wmWidth, $wmHeight);
-        imagecopymerge($thumb, $cut, $x, $y, 0, 0, $wmWidth, $wmHeight, $watermarkOpacity);
-        imagedestroy($cut);
         imagedestroy($watermark);
     }
 

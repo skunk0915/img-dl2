@@ -31,9 +31,9 @@ function saveData($data) {
  */
 function loadWatermarkSettings() {
     $defaults = [
-        'position' => 'bottom-right',
-        'opacity' => 70,
-        'size' => 30
+        'position' => 'center',
+        'opacity' => 45,
+        'size' => 100
     ];
     
     if (!file_exists(WATERMARK_SETTINGS_FILE)) {

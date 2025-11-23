@@ -58,9 +58,9 @@ $regenerated = [];
 $errors = [];
 
 if (isset($_POST['regenerate'])) {
-    $watermarkPosition = $_POST['watermark_position'] ?? 'bottom-right';
-    $watermarkOpacity = intval($_POST['watermark_opacity'] ?? 70);
-    $watermarkSize = intval($_POST['watermark_size'] ?? 30);
+    $watermarkPosition = $_POST['watermark_position'] ?? 'center';
+    $watermarkOpacity = intval($_POST['watermark_opacity'] ?? 45);
+    $watermarkSize = intval($_POST['watermark_size'] ?? 100);
 
     // Save settings
     saveWatermarkSettings([

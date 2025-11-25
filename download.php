@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+require_once 'functions.php';
 
 // JSONレスポンスヘッダー
 header('Content-Type: application/json; charset=UTF-8');
@@ -78,11 +79,14 @@ if (strpos(realpath($imagePath), realpath('upload/')) !== 0) {
     exit;
 }
 
-// パスワードが正しい場合、ダウンロードURLを返す
+// パスワードが正しい場合、トークンを発行してダウンロードURLを返す
+$token = generateToken($imagePath);
+$downloadUrl = 'serve_image.php?token=' . $token;
+
 echo json_encode([
     'success' => true,
     'message' => 'ダウンロードを開始します',
-    'download_url' => $imagePath
+    'download_url' => $downloadUrl
 ]);
 exit;
 ?>

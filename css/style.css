@@ -125,6 +125,10 @@ body {
     max-width: 300px;
 }
 
+.notice {
+    margin: 1em 0;
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -708,8 +712,12 @@ body {
 
 /* レスポンシブ */
 @media (max-width: 768px) {
+    :root {
+        --gallery-columns: 3;
+    }
+
     .gallery {
-        /* grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); */
+        grid-template-columns: repeat(3, 1fr);
         gap: calc(30px / var(--gallery-columns));
         padding: 10px;
     }

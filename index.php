@@ -31,6 +31,11 @@ $images = getImages($sort, []);
         <?php endif; ?>
         <img src="img/logo.png" alt="" class="logo">
 
+        <div class="notice">
+            所属クリエイター専用です。画像をタップしてパスワードを入れるとダウンロード可能です！<br>
+            ※所属クリエイター以外の使用、他人への譲渡や二次利用などの不正行為は厳正に対処致します。
+        </div>
+
         <!-- フィルタリング・ソートフォーム -->
 
         <div class="admin-panel" style="margin-bottom: 40px;">

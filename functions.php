@@ -301,4 +301,61 @@ function getAllTags() {
     }
     return array_keys($tags);
 }
+
+/**
+ * Token Management
+ */
+define('TOKENS_FILE', 'tokens.json');
+
+function loadTokens() {
+    if (!file_exists(TOKENS_FILE)) {
+        return [];
+    }
+    $json = file_get_contents(TOKENS_FILE);
+    return json_decode($json, true) ?: [];
+}
+
+function saveTokens($tokens) {
+    file_put_contents(TOKENS_FILE, json_encode($tokens, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+}
+
+function generateToken($filePath) {
+    $tokens = loadTokens();
+    
+    // Clean expired tokens first
+    $now = time();
+    foreach ($tokens as $t => $data) {
+        if ($data['expires'] < $now) {
+            unset($tokens[$t]);
+        }
+    }
+    
+    // Generate new token
+    $token = bin2hex(random_bytes(16));
+    $expires = $now + (15 * 60); // 15 minutes
+    
+    $tokens[$token] = [
+        'path' => $filePath,
+        'expires' => $expires
+    ];
+    
+    saveTokens($tokens);
+    return $token;
+}
+
+function validateToken($token) {
+    $tokens = loadTokens();
+    $now = time();
+    
+    if (isset($tokens[$token])) {
+        if ($tokens[$token]['expires'] >= $now) {
+            return $tokens[$token]['path'];
+        } else {
+            // Expired
+            unset($tokens[$token]);
+            saveTokens($tokens);
+        }
+    }
+    return false;
+}
 ?>
